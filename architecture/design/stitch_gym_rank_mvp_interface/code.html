@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_stack" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@500;600;700&amp;family=Space+Grotesk:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "on-tertiary": "#00354a", "on-background": "#dfe2ee", "primary": "#ffffff", "on-tertiary-fixed": "#001e2c", "tertiary": "#ffffff", "on-secondary": "#003640", "on-error": "#690005", "background": "#0f131c", "on-secondary-container": "#00424e", "on-surface": "#dfe2ee", "on-primary-fixed-variant": "#3c4d00", "on-primary-container": "#556d00", "surface-dim": "#0f131c", "inverse-on-surface": "#2c3039", "inverse-surface": "#dfe2ee", "inverse-primary": "#506600", "surface-container-highest": "#31353e", "surface-container-lowest": "#0a0e16", "secondary": "#4cd7f6", "on-primary": "#283500", "surface-container-high": "#262a33", "on-primary-fixed": "#161e00", "tertiary-fixed-dim": "#7bd0ff", "secondary-fixed": "#acedff", "surface-variant": "#31353e", "outline": "#8e9379", "primary-container": "#c3f400", "primary-fixed-dim": "#abd600", "on-error-container": "#ffdad6", "on-tertiary-fixed-variant": "#004c69", "secondary-container": "#03b5d3", "on-secondary-fixed": "#001f26", "surface-container": "#1c2028", "outline-variant": "#444933", "error-container": "#93000a", "tertiary-container": "#c4e7ff", "surface-tint": "#abd600", "primary-fixed": "#c3f400", "on-tertiary-container": "#006c93", "tertiary-fixed": "#c4e7ff", "error": "#ffb4ab", "on-secondary-fixed-variant": "#004e5c", "secondary-fixed-dim": "#4cd7f6", "surface": "#0f131c", "on-surface-variant": "#c4c9ac", "surface-bright": "#353942", "surface-container-low": "#181c24" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "margin-desktop": "2.5rem", "space-xs": "0.25rem", "space-lg": "1.5rem", "space-sm": "0.5rem", "gutter-tablet": "1rem", "margin-tablet": "1.5rem", "gutter": "0.75rem", "space-xl": "2rem", "margin": "1rem", "gutter-desktop": "1.5rem", "space-md": "1rem" }, fontFamily: { "display-xl": ["Space Grotesk"], "headline-sm": ["Space Grotesk"], "stat-xl": ["JetBrains Mono"], "headline-lg": ["Space Grotesk"], "body-lg": ["Inter"], "label-sm": ["JetBrains Mono"], "body-sm": ["Inter"], "display-xl-mobile": ["Space Grotesk"], "body-md": ["Inter"], "label-md": ["JetBrains Mono"], "headline-md": ["Space Grotesk"], "stat-lg": ["JetBrains Mono"] }, fontSize: { "display-xl": ["40px", { lineHeight: "48px", letterSpacing: "-0.03em", fontWeight: "700" }], "headline-sm": ["18px", { lineHeight: "24px", letterSpacing: "0em", fontWeight: "600" }], "stat-xl": ["36px", { lineHeight: "40px", letterSpacing: "-0.04em", fontWeight: "700" }], "headline-lg": ["28px", { lineHeight: "34px", letterSpacing: "-0.02em", fontWeight: "700" }], "body-lg": ["16px", { lineHeight: "24px", letterSpacing: "0em", fontWeight: "400" }], "label-sm": ["10px", { lineHeight: "14px", letterSpacing: "0.08em", fontWeight: "600" }], "body-sm": ["12px", { lineHeight: "16px", letterSpacing: "0.01em", fontWeight: "400" }], "display-xl-mobile": ["32px", { lineHeight: "38px", letterSpacing: "-0.02em", fontWeight: "700" }], "body-md": ["14px", { lineHeight: "20px", letterSpacing: "0em", fontWeight: "400" }], "label-md": ["12px", { lineHeight: "16px", letterSpacing: "0.06em", fontWeight: "500" }], "headline-md": ["22px", { lineHeight: "28px", letterSpacing: "-0.01em", fontWeight: "600" }], "stat-lg": ["24px", { lineHeight: "28px", letterSpacing: "-0.02em", fontWeight: "700" }] } } } };</script><style>@layer base{html,body{width:100vw;margin:0;padding:0;}body{overscroll-behavior:none;background-color:#0f131c;color:#dfe2ee;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style></head><body class="bg-surface font-body-md text-on-surface antialiased flex flex-col min-h-screen"><header class="fixed top-0 inset-x-0 z-50 bg-surface/80 backdrop-blur-xl pt-safe shadow-[0_1px_8px_rgba(0,0,0,0.4)]"><div class="h-16 px-margin flex items-center justify-between"><div class="flex items-center gap-space-sm"><button aria-label="Go back" class="min-w-[44px] min-h-[44px] flex items-center justify-center text-on-surface hover:text-primary-container transition-colors" onclick="history.back()"><span class="material-symbols-outlined text-[24px]">arrow_back</span></button><img alt="GymRank Icon" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1U9Eb40CIXDarF62R9GOlH-x2OgmuYVkQInxZ3dVzZxIDuMysa__GpEYlmq9F5CyaaCtM9aQJEfYQ5iZnQk20mi91Dxr04IFCB2GVYvo062gSC2fEPYMR3VuOJ9iHXPqdaabo3DD37HaixnBqRdfFhVNIlIUpKo44jauhw455dUyH-or-WdYJDimDh4tY04mW5MrWCJl1OkZEsQ2SSnj-I0SN_p26NrSzv5H2m-Q3kC"/><h1 class="font-headline-sm text-headline-sm uppercase text-on-surface tracking-tight truncate max-w-[140px] xs:max-w-none">Live Session Tracker</h1></div><div class="flex items-center gap-space-sm"><button aria-label="Profile" class="flex items-center justify-center p-0.5 rounded-full min-w-[44px] min-h-[44px]"><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA179aZw9Ud5KeOFWHwrmnR2oYKrUU0KAJ8G7ERPRWLCkVOnXsY9KaLmtcXwhIAX5hNAgBWwQ0lwjvotWrT4xZSEOi_XFhsX4oFcI1_m_OP_MGqEv8_Ix_PT-rL6_tNhnoyxPw78cldpaSpiou6IOKVr8jI3ToE4h0WaY6XnSs0-qma0UW7Qx7gP9A9Luv4IUfxZs0xjKyYBk1A-AMz1Opk1RMQgA11B7z-c8KncRJi"/></button></div></div></header><main class="flex flex-col relative w-full pt-16 pb-safe bg-surface flex-1"><div class="flex flex-col w-full pb-8">
+<!-- Top Session Bar / HUD Header -->
+<div class="px-margin pt-space-xs pb-space-sm">
+<div class="bg-surface-container-high rounded-xl p-space-sm flex items-center justify-between shadow-md">
+<div class="flex flex-col min-w-0 pr-space-xs">
+<span class="font-label-sm text-label-sm text-secondary tracking-wider uppercase">Push Hypertrophy A</span>
+<div class="flex items-center gap-space-xs mt-0.5">
+<span class="w-2 h-2 rounded-full bg-primary-container animate-pulse"></span>
+<span class="font-stat-lg text-stat-lg text-on-surface leading-none" id="sessionTimer">34:18</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm">
+<div class="flex flex-col items-end">
+<span class="font-label-sm text-label-sm text-on-surface-variant">EXERCISE</span>
+<span class="font-headline-sm text-headline-sm text-primary-container">2 <span class="text-on-surface-variant text-body-sm">/ 5</span></span>
+</div>
+<button aria-label="Workout Settings" class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-on-surface hover:text-primary-container transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[20px]">tune</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Active Exercise Showcase Card -->
+<div class="px-margin mb-space-sm">
+<div class="bg-surface-container rounded-xl overflow-hidden shadow-lg relative">
+<div class="relative h-32 w-full bg-surface-container-highest overflow-hidden">
+<div class="bg-cover bg-center w-full h-full" data-alt="Muscular male bodybuilder performing heavy incline barbell bench press inside a moody low-light athletic gym. Neon lime and cyber cyan dramatic ambient rim highlights on steel bar, barbell plates and chalked hands, high performance fitness cinematography." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCK611QmzzxzvEQgb4hk5C8z70Lt_OzVsvYZ1uBRf7L4T0RpEX_Iz-pOGgZkuptQcx8C4CabeCjxTdqA4FzIjHH-l4XPC-eEUYhTUMaY_spTHUEr7N56k5j0tMOuSoQecgfLd-wmF18TBwLVXMCC2u335IxlU6XtMgDgHprv_4hnc6T5Neu8p8lled7UN-oCFmHKgCC0ptRfJXnDyD848jkLwB_EvoDOhbAtRGReh3J')"></div>
+<div class="absolute inset-0 bg-gradient-to-t from-surface-container via-surface-container/60 to-transparent"></div>
+<div class="absolute top-2.5 left-3 flex items-center gap-space-xs">
+<span class="bg-surface-container-highest/90 backdrop-blur-md px-2 py-0.5 rounded-full font-label-sm text-label-sm text-secondary uppercase flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span> Primary Compound
+          </span>
+</div>
+<div class="absolute top-2.5 right-3 flex items-center gap-1.5">
+<button aria-label="Watch Form Video" class="w-8 h-8 rounded-full bg-surface-container-lowest/80 backdrop-blur-md flex items-center justify-center text-secondary hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">play_circle</span>
+</button>
+<button aria-label="Exercise Notes" class="w-8 h-8 rounded-full bg-surface-container-lowest/80 backdrop-blur-md flex items-center justify-center text-on-surface hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[18px]">sticky_note_2</span>
+</button>
+</div>
+</div>
+<div class="p-space-md">
+<div class="flex items-start justify-between gap-space-sm">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface leading-tight">Incline Barbell Bench Press</h2>
+<div class="flex items-center gap-space-xs mt-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Target:</span>
+<span class="font-body-sm text-body-sm text-secondary">Upper Pectorals • Anterior Delts</span>
+</div>
+</div>
+<div class="bg-surface-container-high px-2 py-1 rounded text-right">
+<span class="font-label-sm text-label-sm text-on-surface-variant block">RPE</span>
+<span class="font-stat-lg text-stat-lg text-primary-container leading-none">8.5</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Interactive Set Logger Matrix -->
+<div class="px-margin flex flex-col gap-space-xs mb-space-md">
+<!-- Table Column Headers -->
+<div class="grid grid-cols-12 px-space-sm py-1 font-label-sm text-label-sm text-on-surface-variant uppercase items-center">
+<span class="col-span-2">Set</span>
+<span class="col-span-3 text-center">Prev</span>
+<span class="col-span-3 text-center">Weight</span>
+<span class="col-span-2 text-center">Reps</span>
+<span class="col-span-2 text-right">Log</span>
+</div>
+<!-- Set 1 (Completed Warmup) -->
+<div class="bg-surface-container-low rounded-lg p-space-sm grid grid-cols-12 items-center shadow-sm">
+<div class="col-span-2 flex items-center gap-1">
+<span class="font-stat-lg text-stat-lg text-on-surface leading-none">1</span>
+<span class="bg-surface-container-high text-on-surface-variant font-label-sm text-[9px] px-1 py-0.5 rounded">W</span>
+</div>
+<div class="col-span-3 text-center font-label-md text-label-md text-on-surface-variant">
+        135<span class="text-body-sm text-on-surface-variant/60">×10</span>
+</div>
+<div class="col-span-3 text-center font-stat-lg text-stat-lg text-on-surface">
+        135 <span class="font-label-sm text-[10px] text-on-surface-variant">lbs</span>
+</div>
+<div class="col-span-2 text-center font-stat-lg text-stat-lg text-on-surface">
+        10
+      </div>
+<div class="col-span-2 flex justify-end">
+<div class="w-8 h-8 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center shadow-md">
+<span class="material-symbols-outlined text-[20px] font-bold">check</span>
+</div>
+</div>
+</div>
+<!-- Set 2 (Completed Working) -->
+<div class="bg-surface-container-low rounded-lg p-space-sm grid grid-cols-12 items-center shadow-sm">
+<div class="col-span-2 flex items-center gap-1">
+<span class="font-stat-lg text-stat-lg text-on-surface leading-none">2</span>
+<span class="bg-secondary/10 text-secondary font-label-sm text-[9px] px-1 py-0.5 rounded">WRK</span>
+</div>
+<div class="col-span-3 text-center font-label-md text-label-md text-on-surface-variant">
+        175<span class="text-body-sm text-on-surface-variant/60">×10</span>
+</div>
+<div class="col-span-3 text-center font-stat-lg text-stat-lg text-on-surface">
+        175 <span class="font-label-sm text-[10px] text-on-surface-variant">lbs</span>
+</div>
+<div class="col-span-2 text-center font-stat-lg text-stat-lg text-on-surface">
+        10
+      </div>
+<div class="col-span-2 flex justify-end">
+<div class="w-8 h-8 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center shadow-md">
+<span class="material-symbols-outlined text-[20px] font-bold">check</span>
+</div>
+</div>
+</div>
+<!-- Set 3 (Active Focus Row - Glowing Elevation Level 3) -->
+<div class="bg-surface-container-high rounded-xl p-space-sm grid grid-cols-12 items-center shadow-lg relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1.5 bg-primary-container"></div>
+<div class="col-span-2 pl-2 flex flex-col justify-center">
+<div class="flex items-center gap-1">
+<span class="font-stat-lg text-stat-lg text-primary-container leading-none">3</span>
+</div>
+<span class="font-label-sm text-[9px] text-primary-container uppercase tracking-widest">Active</span>
+</div>
+<div class="col-span-3 text-center font-label-md text-label-md text-on-surface-variant">
+        185<span class="text-body-sm text-on-surface-variant/60">×8</span>
+</div>
+<!-- Weight Stepper -->
+<div class="col-span-4 flex items-center justify-center gap-1">
+<button class="w-7 h-7 rounded-md bg-surface-container-lowest text-on-surface active:bg-primary-container active:text-on-primary-container flex items-center justify-center transition-colors shadow-sm" id="weightDec">
+<span class="material-symbols-outlined text-[16px]">remove</span>
+</button>
+<div class="flex flex-col items-center">
+<span class="font-stat-lg text-stat-lg text-on-surface leading-none" id="currentWeight">185</span>
+<span class="font-label-sm text-[9px] text-on-surface-variant uppercase">lbs</span>
+</div>
+<button class="w-7 h-7 rounded-md bg-surface-container-lowest text-on-surface active:bg-primary-container active:text-on-primary-container flex items-center justify-center transition-colors shadow-sm" id="weightInc">
+<span class="material-symbols-outlined text-[16px]">add</span>
+</button>
+</div>
+<!-- Reps Stepper & Check -->
+<div class="col-span-3 flex items-center justify-end gap-1.5">
+<div class="flex items-center gap-1">
+<button class="w-6 h-6 rounded-md bg-surface-container-lowest text-on-surface flex items-center justify-center" id="repDec">
+<span class="material-symbols-outlined text-[14px]">remove</span>
+</button>
+<span class="font-stat-lg text-stat-lg text-on-surface min-w-[20px] text-center leading-none" id="currentReps">8</span>
+<button class="w-6 h-6 rounded-md bg-surface-container-lowest text-on-surface flex items-center justify-center" id="repInc">
+<span class="material-symbols-outlined text-[14px]">add</span>
+</button>
+</div>
+<button aria-label="Complete Set" class="w-8 h-8 rounded-full bg-surface-container-lowest text-on-surface hover:bg-primary-container hover:text-on-primary-container flex items-center justify-center transition-all ml-1 shadow-sm" id="completeActiveSet">
+<span class="material-symbols-outlined text-[20px]">check</span>
+</button>
+</div>
+</div>
+<!-- Set 4 (Pending) -->
+<div class="bg-surface-container-low rounded-lg p-space-sm grid grid-cols-12 items-center opacity-60 shadow-sm">
+<div class="col-span-2 flex items-center gap-1">
+<span class="font-stat-lg text-stat-lg text-on-surface leading-none">4</span>
+<span class="bg-surface-container-high text-on-surface-variant font-label-sm text-[9px] px-1 py-0.5 rounded">WRK</span>
+</div>
+<div class="col-span-3 text-center font-label-md text-label-md text-on-surface-variant">
+        185<span class="text-body-sm text-on-surface-variant/60">×8</span>
+</div>
+<div class="col-span-3 text-center font-stat-lg text-stat-lg text-on-surface">
+        185 <span class="font-label-sm text-[10px] text-on-surface-variant">lbs</span>
+</div>
+<div class="col-span-2 text-center font-stat-lg text-stat-lg text-on-surface">
+        8
+      </div>
+<div class="col-span-2 flex justify-end">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">radio_button_unchecked</span>
+</div>
+</div>
+</div>
+<!-- Table Action Controls -->
+<div class="flex items-center justify-between pt-1">
+<button class="flex items-center gap-1 text-primary-container font-label-md text-label-md px-3 py-2 rounded-lg bg-surface-container-high hover:bg-surface-container-highest transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[18px]">add_circle</span>
+<span>Add Set</span>
+</button>
+<button class="flex items-center gap-1 text-on-surface-variant font-label-md text-label-md px-3 py-2 rounded-lg hover:text-error transition-colors">
+<span class="material-symbols-outlined text-[18px]">delete_sweep</span>
+<span>Remove Set</span>
+</button>
+</div>
+</div>
+<!-- Persistent Biometric Rest Timer Card -->
+<div class="px-margin mb-space-md">
+<div class="bg-surface-container-high rounded-xl p-space-md shadow-xl flex flex-col gap-space-sm relative overflow-hidden">
+<!-- Glow ambient pulse backdrop -->
+<div class="absolute -right-8 -top-8 w-32 h-32 bg-secondary/15 rounded-full blur-2xl pointer-events-none"></div>
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary text-[20px] animate-spin" style="animation-duration: 6s;">timelapse</span>
+<span class="font-label-md text-label-md uppercase tracking-wider text-on-surface">Rest Interval</span>
+</div>
+<div class="flex items-center gap-1.5 bg-surface-container-lowest px-2.5 py-1 rounded-full shadow-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-primary-container"></span>
+<span class="font-label-sm text-[10px] text-primary-container uppercase tracking-wider">Auto-Timer On</span>
+</div>
+</div>
+<div class="flex items-center justify-between gap-space-md">
+<!-- Circular Progress Ring Indicator -->
+<div class="relative w-20 h-20 flex-shrink-0 flex items-center justify-center">
+<svg class="w-full h-full -rotate-90 transform" viewbox="0 0 72 72">
+<circle class="text-surface-container-lowest" cx="36" cy="36" fill="none" r="30" stroke="currentColor" stroke-width="5"></circle>
+<circle class="text-secondary" cx="36" cy="36" fill="none" id="restProgressCircle" r="30" stroke="currentColor" stroke-dasharray="188.4" stroke-dashoffset="56.5" stroke-linecap="round" stroke-width="5"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center">
+<span class="material-symbols-outlined text-[16px] text-secondary">hotel_class</span>
+</div>
+</div>
+<!-- Big Countdown & Control Adjusters -->
+<div class="flex flex-col flex-1">
+<div class="flex items-baseline gap-1.5">
+<span class="font-stat-xl text-stat-xl text-on-surface leading-none" id="restDisplay">01:18</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Remaining</span>
+</div>
+<div class="flex items-center gap-space-xs mt-3">
+<button class="px-2.5 py-1.5 rounded-full bg-surface-container text-on-surface font-label-md text-label-md active:bg-secondary active:text-on-secondary transition-colors shadow-sm" id="add30s">
+              +30s
+            </button>
+<button class="px-2.5 py-1.5 rounded-full bg-surface-container text-on-surface font-label-md text-label-md active:bg-secondary active:text-on-secondary transition-colors shadow-sm" id="sub15s">
+              -15s
+            </button>
+<button class="px-3 py-1.5 rounded-full bg-surface-container-lowest text-secondary font-label-md text-label-md ml-auto hover:bg-secondary hover:text-on-secondary transition-colors shadow-sm flex items-center gap-1" id="skipRest">
+<span>Skip</span>
+<span class="material-symbols-outlined text-[14px]">fast_forward</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Progression & Workout Finish Actions -->
+<div class="px-margin flex flex-col gap-space-sm mt-auto">
+<!-- Next Exercise Card Button -->
+<button class="w-full bg-primary-container text-on-primary-container p-space-md rounded-xl flex items-center justify-between shadow-lg active:scale-[0.99] transition-transform">
+<div class="flex flex-col text-left">
+<span class="font-label-sm text-label-sm text-on-primary-container/80 uppercase tracking-wider">Next Movement (3/5)</span>
+<span class="font-headline-sm text-headline-sm text-on-primary-container">Standing DB Overhead Press</span>
+</div>
+<div class="w-10 h-10 rounded-full bg-on-primary-container/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px]">arrow_forward</span>
+</div>
+</button>
+<!-- Finish Session Secondary Button -->
+<button class="w-full bg-surface-container-high text-on-surface py-3.5 px-space-md rounded-xl font-label-md text-label-md uppercase tracking-wider flex items-center justify-center gap-2 hover:bg-surface-container-highest active:text-error transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[18px]">stop_circle</span>
+<span>Finish Workout Session</span>
+</button>
+</div>
+</div>
+<script>
+  // Quick Stepper Interaction
+  const weightVal = document.getElementById('currentWeight');
+  const repsVal = document.getElementById('currentReps');
+  
+  document.getElementById('weightDec')?.addEventListener('click', () => {
+    let w = parseInt(weightVal.textContent, 10);
+    if (w > 5) weightVal.textContent = w - 5;
+  });
+  document.getElementById('weightInc')?.addEventListener('click', () => {
+    let w = parseInt(weightVal.textContent, 10);
+    weightVal.textContent = w + 5;
+  });
+  
+  document.getElementById('repDec')?.addEventListener('click', () => {
+    let r = parseInt(repsVal.textContent, 10);
+    if (r > 1) repsVal.textContent = r - 1;
+  });
+  document.getElementById('repInc')?.addEventListener('click', () => {
+    let r = parseInt(repsVal.textContent, 10);
+    repsVal.textContent = r + 1;
+  });
+
+  // Rest Timer Controller
+  let restSeconds = 78;
+  const restDisplay = document.getElementById('restDisplay');
+  const restProgress = document.getElementById('restProgressCircle');
+  const totalRest = 90;
+
+  function updateRestUI() {
+    if (!restDisplay || !restProgress) return;
+    const m = Math.floor(Math.max(0, restSeconds) / 60);
+    const s = Math.max(0, restSeconds) % 60;
+    restDisplay.textContent = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    const offset = 188.4 - (188.4 * (Math.max(0, restSeconds) / totalRest));
+    restProgress.style.strokeDashoffset = `${offset}`;
+  }
+
+  const restInterval = setInterval(() => {
+    if (restSeconds > 0) {
+      restSeconds--;
+      updateRestUI();
+    }
+  }, 1000);
+
+  document.getElementById('add30s')?.addEventListener('click', () => {
+    restSeconds += 30;
+    updateRestUI();
+  });
+  document.getElementById('sub15s')?.addEventListener('click', () => {
+    restSeconds = Math.max(0, restSeconds - 15);
+    updateRestUI();
+  });
+  document.getElementById('skipRest')?.addEventListener('click', () => {
+    restSeconds = 0;
+    updateRestUI();
+  });
+
+  // Elapsed Workout Session Timer
+  let elapsedSeconds = 34 * 60 + 18;
+  const sessionTimer = document.getElementById('sessionTimer');
+  setInterval(() => {
+    elapsedSeconds++;
+    if (sessionTimer) {
+      const min = Math.floor(elapsedSeconds / 60);
+      const sec = elapsedSeconds % 60;
+      sessionTimer.textContent = `${String(min).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+    }
+  }, 1000);
+
+  // Complete Set Demo
+  document.getElementById('completeActiveSet')?.addEventListener('click', function() {
+    this.classList.remove('bg-surface-container-lowest', 'text-on-surface');
+    this.classList.add('bg-primary-container', 'text-on-primary-container');
+    restSeconds = 90;
+    updateRestUI();
+  });
+</script></main></body></html>

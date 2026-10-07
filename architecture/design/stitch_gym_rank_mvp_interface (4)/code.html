@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=JetBrains+Mono:wght@500;600;700&amp;family=Space+Grotesk:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "on-tertiary": "#00354a", "on-background": "#dfe2ee", "primary": "#ffffff", "on-tertiary-fixed": "#001e2c", "tertiary": "#ffffff", "on-secondary": "#003640", "on-error": "#690005", "background": "#0f131c", "on-secondary-container": "#00424e", "on-surface": "#dfe2ee", "on-primary-fixed-variant": "#3c4d00", "on-primary-container": "#556d00", "surface-dim": "#0f131c", "inverse-on-surface": "#2c3039", "inverse-surface": "#dfe2ee", "inverse-primary": "#506600", "surface-container-highest": "#31353e", "surface-container-lowest": "#0a0e16", "secondary": "#4cd7f6", "on-primary": "#283500", "surface-container-high": "#262a33", "on-primary-fixed": "#161e00", "tertiary-fixed-dim": "#7bd0ff", "secondary-fixed": "#acedff", "surface-variant": "#31353e", "outline": "#8e9379", "primary-container": "#c3f400", "primary-fixed-dim": "#abd600", "on-error-container": "#ffdad6", "on-tertiary-fixed-variant": "#004c69", "secondary-container": "#03b5d3", "on-secondary-fixed": "#001f26", "surface-container": "#1c2028", "outline-variant": "#444933", "error-container": "#93000a", "tertiary-container": "#c4e7ff", "surface-tint": "#abd600", "primary-fixed": "#c3f400", "on-tertiary-container": "#006c93", "tertiary-fixed": "#c4e7ff", "error": "#ffb4ab", "on-secondary-fixed-variant": "#004e5c", "secondary-fixed-dim": "#4cd7f6", "surface": "#0f131c", "on-surface-variant": "#c4c9ac", "surface-bright": "#353942", "surface-container-low": "#181c24" }, borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, spacing: { "margin-desktop": "2.5rem", "space-xs": "0.25rem", "space-lg": "1.5rem", "space-sm": "0.5rem", "gutter-tablet": "1rem", "margin-tablet": "1.5rem", "gutter": "0.75rem", "space-xl": "2rem", "margin": "1rem", "gutter-desktop": "1.5rem", "space-md": "1rem" }, fontFamily: { "display-xl": ["Space Grotesk"], "headline-sm": ["Space Grotesk"], "stat-xl": ["JetBrains Mono"], "headline-lg": ["Space Grotesk"], "body-lg": ["Inter"], "label-sm": ["JetBrains Mono"], "body-sm": ["Inter"], "display-xl-mobile": ["Space Grotesk"], "body-md": ["Inter"], "label-md": ["JetBrains Mono"], "headline-md": ["Space Grotesk"], "stat-lg": ["JetBrains Mono"] }, fontSize: { "display-xl": ["40px", { lineHeight: "48px", letterSpacing: "-0.03em", fontWeight: "700" }], "headline-sm": ["18px", { lineHeight: "24px", letterSpacing: "0em", fontWeight: "600" }], "stat-xl": ["36px", { lineHeight: "40px", letterSpacing: "-0.04em", fontWeight: "700" }], "headline-lg": ["28px", { lineHeight: "34px", letterSpacing: "-0.02em", fontWeight: "700" }], "body-lg": ["16px", { lineHeight: "24px", letterSpacing: "0em", fontWeight: "400" }], "label-sm": ["10px", { lineHeight: "14px", letterSpacing: "0.08em", fontWeight: "600" }], "body-sm": ["12px", { lineHeight: "16px", letterSpacing: "0.01em", fontWeight: "400" }], "display-xl-mobile": ["32px", { lineHeight: "38px", letterSpacing: "-0.02em", fontWeight: "700" }], "body-md": ["14px", { lineHeight: "20px", letterSpacing: "0em", fontWeight: "400" }], "label-md": ["12px", { lineHeight: "16px", letterSpacing: "0.06em", fontWeight: "500" }], "headline-md": ["22px", { lineHeight: "28px", letterSpacing: "-0.01em", fontWeight: "600" }], "stat-lg": ["24px", { lineHeight: "28px", letterSpacing: "-0.02em", fontWeight: "700" }] } } } };</script><style>@layer base{html,body{width:100vw;margin:0;padding:0;}body{overscroll-behavior:none;background-color:#0f131c;color:#dfe2ee;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style></head><body class="bg-surface font-body-md text-on-surface antialiased flex flex-col min-h-screen"><header class="fixed top-0 inset-x-0 z-50 bg-surface/80 backdrop-blur-xl pt-safe shadow-[0_1px_8px_rgba(0,0,0,0.4)]"><div class="h-16 px-margin flex items-center justify-between"><div class="flex items-center gap-space-sm"><img alt="GymRank Icon" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1U9Eb40CIXDarF62R9GOlH-x2OgmuYVkQInxZ3dVzZxIDuMysa__GpEYlmq9F5CyaaCtM9aQJEfYQ5iZnQk20mi91Dxr04IFCB2GVYvo062gSC2fEPYMR3VuOJ9iHXPqdaabo3DD37HaixnBqRdfFhVNIlIUpKo44jauhw455dUyH-or-WdYJDimDh4tY04mW5MrWCJl1OkZEsQ2SSnj-I0SN_p26NrSzv5H2m-Q3kC"/><span class="font-headline-sm text-headline-sm uppercase text-on-surface tracking-tight">GymRank</span></div><div class="flex items-center gap-space-sm"><div class="hidden xs:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container-high"><span class="w-1.5 h-1.5 rounded-full bg-primary-container animate-pulse"></span><span class="font-label-sm text-label-sm uppercase tracking-wider text-primary-container">Gold II</span></div><button aria-label="Profile" class="flex items-center justify-center p-0.5 rounded-full min-w-[44px] min-h-[44px]"><img alt="Profile" class="w-8 h-8 rounded-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA179aZw9Ud5KeOFWHwrmnR2oYKrUU0KAJ8G7ERPRWLCkVOnXsY9KaLmtcXwhIAX5hNAgBWwQ0lwjvotWrT4xZSEOi_XFhsX4oFcI1_m_OP_MGqEv8_Ix_PT-rL6_tNhnoyxPw78cldpaSpiou6IOKVr8jI3ToE4h0WaY6XnSs0-qma0UW7Qx7gP9A9Luv4IUfxZs0xjKyYBk1A-AMz1Opk1RMQgA11B7z-c8KncRJi"/></button></div></div></header><main class="flex flex-col relative w-full pt-16 pb-20 bg-surface flex-1"><div class="flex flex-col w-full">
+<div class="px-margin pt-space-md pb-space-lg flex flex-col gap-space-lg">
+<!-- Top Key Metrics Ticker -->
+<div class="grid grid-cols-3 gap-gutter">
+<div class="bg-surface-container-high rounded-xl p-space-sm flex flex-col justify-between shadow-md">
+<div class="flex items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px] text-secondary">fitness_center</span>
+<span class="font-label-sm text-label-sm uppercase truncate">Total</span>
+</div>
+<div class="mt-space-xs">
+<span class="font-stat-lg text-stat-lg text-on-surface tracking-tight">142</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant block">Sessions</span>
+</div>
+</div>
+<div class="bg-surface-container-high rounded-xl p-space-sm flex flex-col justify-between shadow-md">
+<div class="flex items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px] text-primary-container" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+<span class="font-label-sm text-label-sm uppercase truncate">Streak</span>
+</div>
+<div class="mt-space-xs">
+<div class="flex items-baseline gap-1">
+<span class="font-stat-lg text-stat-lg text-primary-container">15</span>
+<span class="font-label-sm text-label-sm text-primary-container">D</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant block">Active Fire</span>
+</div>
+</div>
+<div class="bg-surface-container-high rounded-xl p-space-sm flex flex-col justify-between shadow-md">
+<div class="flex items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px] text-secondary-fixed">military_tech</span>
+<span class="font-label-sm text-label-sm uppercase truncate">Record</span>
+</div>
+<div class="mt-space-xs">
+<div class="flex items-baseline gap-1">
+<span class="font-stat-lg text-stat-lg text-on-surface">32</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">D</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant block">All-time High</span>
+</div>
+</div>
+</div>
+<!-- Monthly Streak Strip & Frequency Visualizer -->
+<div class="bg-surface-container rounded-xl p-space-md shadow-md flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-container text-[20px]">calendar_month</span>
+<span class="font-headline-sm text-headline-sm text-on-surface">October 2024</span>
+</div>
+<div class="flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-surface-container-high">
+<span class="w-1.5 h-1.5 rounded-full bg-primary-container animate-pulse"></span>
+<span class="font-label-sm text-label-sm text-primary-container uppercase">15-Day Lock</span>
+</div>
+</div>
+<!-- Compact 2-Week Rolling Calendar Matrix -->
+<div class="flex flex-col gap-2">
+<div class="grid grid-cols-7 gap-1 text-center font-label-sm text-label-sm text-on-surface-variant pb-1">
+<span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span>
+</div>
+<!-- Oct 14 - Oct 20 -->
+<div class="grid grid-cols-7 gap-1 text-center">
+<div class="bg-surface-container-high rounded-lg p-1.5 flex flex-col items-center justify-center gap-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant">14</span>
+<span class="w-2 h-2 rounded-full bg-primary-container shadow-[0_0_6px_rgba(195,244,0,0.6)]"></span>
+</div>
+<div class="bg-surface-container-high rounded-lg p-1.5 flex flex-col items-center justify-center gap-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant">15</span>
+<span class="w-2 h-2 rounded-full bg-primary-container shadow-[0_0_6px_rgba(195,244,0,0.6)]"></span>
+</div>
+<div class="bg-surface-container-high rounded-lg p-1.5 flex flex-col items-center justify-center gap-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant">16</span>
+<span class="w-2 h-2 rounded-full bg-surface-variant"></span>
+</div>
+<div class="bg-surface-container-high rounded-lg p-1.5 flex flex-col items-center justify-center gap-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant">17</span>
+<span class="w-2 h-2 rounded-full bg-primary-container shadow-[0_0_6px_rgba(195,244,0,0.6)]"></span>
+</div>
+<div class="bg-surface-container-high rounded-lg p-1.5 flex flex-col items-center justify-center gap-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant">18</span>
+<span class="w-2 h-2 rounded-full bg-primary-container shadow-[0_0_6px_rgba(195,244,0,0.6)]"></span>
+</div>
+<div class="bg-surface-container-high rounded-lg p-1.5 flex flex-col items-center justify-center gap-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant">19</span>
+<span class="w-2 h-2 rounded-full bg-primary-container shadow-[0_0_6px_rgba(195,244,0,0.6)]"></span>
+</div>
+<div class="bg-surface-container-high/60 rounded-lg p-1.5 flex flex-col items-center justify-center gap-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant">20</span>
+<span class="material-symbols-outlined text-[10px] text-secondary" style="font-variation-settings: 'FILL' 1;">shield</span>
+</div>
+</div>
+<!-- Oct 21 - Oct 27 -->
+<div class="grid grid-cols-7 gap-1 text-center">
+<div class="bg-surface-container-high rounded-lg p-1.5 flex flex-col items-center justify-center gap-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant">21</span>
+<span class="w-2 h-2 rounded-full bg-primary-container shadow-[0_0_6px_rgba(195,244,0,0.6)]"></span>
+</div>
+<div class="bg-surface-container-high rounded-lg p-1.5 flex flex-col items-center justify-center gap-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant">22</span>
+<span class="w-2 h-2 rounded-full bg-primary-container shadow-[0_0_6px_rgba(195,244,0,0.6)]"></span>
+</div>
+<div class="bg-surface-container-high/60 rounded-lg p-1.5 flex flex-col items-center justify-center gap-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant">23</span>
+<span class="material-symbols-outlined text-[10px] text-secondary" style="font-variation-settings: 'FILL' 1;">shield</span>
+</div>
+<div class="bg-surface-container-highest rounded-lg p-1.5 flex flex-col items-center justify-center gap-1">
+<span class="font-label-sm text-label-sm text-primary-container font-semibold">24</span>
+<span class="w-2 h-2 rounded-full bg-primary-container shadow-[0_0_8px_rgba(195,244,0,0.9)] animate-pulse"></span>
+</div>
+<div class="bg-surface-container-low rounded-lg p-1.5 flex flex-col items-center justify-center gap-1 opacity-50">
+<span class="font-label-sm text-label-sm text-on-surface-variant">25</span>
+<span class="w-1.5 h-1.5 rounded-full bg-surface-variant"></span>
+</div>
+<div class="bg-surface-container-low rounded-lg p-1.5 flex flex-col items-center justify-center gap-1 opacity-50">
+<span class="font-label-sm text-label-sm text-on-surface-variant">26</span>
+<span class="w-1.5 h-1.5 rounded-full bg-surface-variant"></span>
+</div>
+<div class="bg-surface-container-low rounded-lg p-1.5 flex flex-col items-center justify-center gap-1 opacity-50">
+<span class="font-label-sm text-label-sm text-on-surface-variant">27</span>
+<span class="w-1.5 h-1.5 rounded-full bg-surface-variant"></span>
+</div>
+</div>
+</div>
+<!-- Streak Legend & Target Progress -->
+<div class="bg-surface-container-high rounded-xl p-space-sm flex flex-col gap-2">
+<div class="flex items-center justify-between text-on-surface">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px] text-secondary">speed</span>
+<span class="font-label-md text-label-md">Weekly Velocity</span>
+</div>
+<div class="flex items-baseline gap-1">
+<span class="font-stat-lg text-stat-lg text-primary-container">4.8</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">/ 5.0 target</span>
+</div>
+</div>
+<!-- Frequency Fill Gauge -->
+<div class="w-full bg-surface-container-lowest h-2 rounded-full overflow-hidden flex">
+<div class="h-full bg-gradient-to-r from-secondary to-primary-container rounded-full" style="width: 96%;"></div>
+</div>
+<div class="flex items-center justify-between pt-1">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-primary-container"></span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Workout</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[13px] text-secondary" style="font-variation-settings: 'FILL' 1;">shield</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Rest Day (Shield Active)</span>
+</div>
+<span class="font-label-sm text-label-sm text-primary-container font-semibold">96% Met</span>
+</div>
+</div>
+</div>
+<!-- Exercise Progression & PR Sparkline Section -->
+<div class="bg-surface-container rounded-xl p-space-md shadow-md flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<div>
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary">Biometric Tracking</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">PR Velocity</h2>
+</div>
+<div class="flex items-center gap-1 bg-surface-container-high px-2 py-1 rounded-full">
+<span class="material-symbols-outlined text-[14px] text-primary-container">trending_up</span>
+<span class="font-label-sm text-label-sm text-primary-container">+19.3%</span>
+</div>
+</div>
+<!-- Exercise Toggle Tabs -->
+<div class="flex bg-surface-container-low p-1 rounded-xl gap-1" id="exercise-tabs">
+<button class="flex-1 py-1.5 px-2 rounded-lg font-label-sm text-label-sm text-center transition-colors bg-surface-container-high text-primary-container font-semibold shadow-sm" id="tab-bench" onclick="switchExercise('bench')">
+          Incline Bench
+        </button>
+<button class="flex-1 py-1.5 px-2 rounded-lg font-label-sm text-label-sm text-center transition-colors text-on-surface-variant hover:text-on-surface" id="tab-deadlift" onclick="switchExercise('deadlift')">
+          Deadlift
+        </button>
+<button class="flex-1 py-1.5 px-2 rounded-lg font-label-sm text-label-sm text-center transition-colors text-on-surface-variant hover:text-on-surface" id="tab-squat" onclick="switchExercise('squat')">
+          Squat
+        </button>
+</div>
+<!-- Progression Dynamic Card with SVG Sparkline -->
+<div class="bg-surface-container-high rounded-xl p-space-md flex flex-col gap-space-sm relative overflow-hidden">
+<div class="flex items-center justify-between z-10">
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant" id="ex-duration">Past 8 Weeks (1RM Delta)</span>
+<div class="flex items-baseline gap-2 mt-0.5">
+<span class="font-stat-xl text-stat-xl text-on-surface" id="ex-weight">185</span>
+<span class="font-label-md text-label-md text-primary-container" id="ex-unit">lbs (+30 lbs)</span>
+</div>
+</div>
+<div class="text-right">
+<span class="font-label-sm text-label-sm text-on-surface-variant block">Baseline</span>
+<span class="font-stat-lg text-stat-lg text-on-surface-variant" id="ex-base">155 lbs</span>
+</div>
+</div>
+<!-- Inline SVG Sparkline Curve -->
+<div class="w-full h-28 relative mt-1">
+<svg class="w-full h-full overflow-visible" fill="none" preserveaspectratio="none" viewbox="0 0 320 80">
+<!-- Grid Lines -->
+<line class="text-surface-variant/40" stroke="currentColor" stroke-dasharray="3 3" x1="0" x2="320" y1="20" y2="20"></line>
+<line class="text-surface-variant/40" stroke="currentColor" stroke-dasharray="3 3" x1="0" x2="320" y1="50" y2="50"></line>
+<line class="text-surface-variant/30" stroke="currentColor" x1="0" x2="320" y1="75" y2="75"></line>
+<!-- Gradient Area -->
+<defs>
+<lineargradient id="sparklineGrad" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#c3f400" stop-opacity="0.35"></stop>
+<stop offset="100%" stop-color="#c3f400" stop-opacity="0.0"></stop>
+</lineargradient>
+</defs>
+<path d="M 0 70 L 40 65 L 85 58 L 130 52 L 180 40 L 225 35 L 275 22 L 320 12 L 320 80 L 0 80 Z" fill="url(#sparklineGrad)" id="sparkline-fill"></path>
+<path d="M 0 70 L 40 65 L 85 58 L 130 52 L 180 40 L 225 35 L 275 22 L 320 12" id="sparkline-line" stroke="#c3f400" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path>
+<!-- Current PR Ping Indicator -->
+<circle cx="320" cy="12" fill="#0f131c" r="5" stroke="#c3f400" stroke-width="2.5"></circle>
+<circle class="animate-ping" cx="320" cy="12" fill="#c3f400" fill-opacity="0.25" r="9"></circle>
+</svg>
+</div>
+<div class="flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm pt-1">
+<span>W1 • 155 lbs</span>
+<span>W3 • 165 lbs</span>
+<span>W6 • 175 lbs</span>
+<span class="text-primary-container font-semibold">W8 • 185 lbs (PR)</span>
+</div>
+</div>
+</div>
+<!-- Workout History Feed Section -->
+<div class="flex flex-col gap-space-md">
+<!-- Section Title & Filter Pills -->
+<div class="flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Workout Feed</h2>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Showing latest</span>
+</div>
+<!-- Filter Options -->
+<div class="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+<button class="px-3 py-1.5 rounded-full font-label-sm text-label-sm whitespace-nowrap bg-primary-container text-on-primary-container font-semibold transition-colors" id="filter-all" onclick="filterLogs('all')">
+            All Workouts
+          </button>
+<button class="px-3 py-1.5 rounded-full font-label-sm text-label-sm whitespace-nowrap bg-surface-container-high text-on-surface-variant hover:text-on-surface transition-colors" id="filter-custom" onclick="filterLogs('custom')">
+            Custom Workouts
+          </button>
+<button class="px-3 py-1.5 rounded-full font-label-sm text-label-sm whitespace-nowrap bg-surface-container-high text-on-surface-variant hover:text-on-surface transition-colors flex items-center gap-1" id="filter-pr" onclick="filterLogs('pr')">
+<span class="material-symbols-outlined text-[13px] text-primary-container">star</span>
+            Personal Bests
+          </button>
+</div>
+</div>
+<!-- Feed List Container -->
+<div class="flex flex-col gap-space-sm" id="workout-list">
+<!-- Entry 1: Today, Oct 24 -->
+<div class="workout-card bg-surface-container rounded-xl p-space-md shadow-md flex flex-col gap-space-sm transition-all" data-type="all custom">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="px-2 py-0.5 rounded-full bg-primary-container/15 text-primary-container font-label-sm text-label-sm uppercase">Today</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Oct 24 • 07:15 AM</span>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px] text-secondary">schedule</span>
+<span class="font-label-sm text-label-sm">54 min</span>
+</div>
+</div>
+<div class="flex items-baseline justify-between">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Push Hypertrophy A</h3>
+<span class="font-label-sm text-label-sm text-primary-container">18 Sets Complete</span>
+</div>
+<!-- Volume & Highlights Ribbon -->
+<div class="grid grid-cols-3 gap-2 bg-surface-container-high rounded-lg p-2 text-center">
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant block">Volume</span>
+<span class="font-label-md text-label-md text-on-surface font-semibold">14,820 lbs</span>
+</div>
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant block">Avg RPE</span>
+<span class="font-label-md text-label-md text-on-surface font-semibold">8.5</span>
+</div>
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant block">Intensity</span>
+<span class="font-label-md text-label-md text-secondary font-semibold">High Load</span>
+</div>
+</div>
+<!-- Expandable Accordion Trigger -->
+<div class="pt-1">
+<button class="w-full flex items-center justify-between text-on-surface-variant hover:text-on-surface transition-colors py-1" onclick="toggleDetails('details-1', this)">
+<span class="font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">visibility</span>
+                View Details &amp; Set Breakdown
+              </span>
+<span class="material-symbols-outlined text-[18px] transition-transform duration-200" id="icon-details-1">expand_more</span>
+</button>
+<div class="hidden flex-col gap-2 pt-2 mt-2 bg-surface-container-lowest/60 rounded-lg p-3" id="details-1">
+<div class="flex justify-between items-center text-on-surface font-label-sm text-label-sm">
+<span>Incline Dumbbell Press</span>
+<span class="text-primary-container">4 sets x 10 @ 75 lbs</span>
+</div>
+<div class="flex justify-between items-center text-on-surface font-label-sm text-label-sm">
+<span>Barbell Overhead Press</span>
+<span>4 sets x 8 @ 115 lbs</span>
+</div>
+<div class="flex justify-between items-center text-on-surface font-label-sm text-label-sm">
+<span>Cable Lateral Raises</span>
+<span>5 sets x 12 @ 25 lbs</span>
+</div>
+<div class="flex justify-between items-center text-on-surface font-label-sm text-label-sm">
+<span>Tricep Rope Pushdowns</span>
+<span>5 sets x 12 @ 55 lbs</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Entry 2: Oct 22 (PR Hit) -->
+<div class="workout-card bg-surface-container rounded-xl p-space-md shadow-md flex flex-col gap-space-sm transition-all" data-type="all pr">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Oct 22 • 06:40 PM</span>
+<span class="px-2 py-0.5 rounded-full bg-primary-container text-on-primary-container font-label-sm text-label-sm font-semibold flex items-center gap-0.5">
+<span class="material-symbols-outlined text-[12px]">trophy</span>
+                1 PR
+              </span>
+</div>
+<div class="flex items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px] text-secondary">schedule</span>
+<span class="font-label-sm text-label-sm">48 min</span>
+</div>
+</div>
+<div class="flex items-baseline justify-between">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Pull Power B</h3>
+<span class="font-label-sm text-label-sm text-secondary">16 Sets Complete</span>
+</div>
+<!-- Volume & Highlights Ribbon -->
+<div class="grid grid-cols-3 gap-2 bg-surface-container-high rounded-lg p-2 text-center">
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant block">Volume</span>
+<span class="font-label-md text-label-md text-on-surface font-semibold">16,200 lbs</span>
+</div>
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant block">New Max</span>
+<span class="font-label-md text-label-md text-primary-container font-semibold">Deadlift 385#</span>
+</div>
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant block">Work Capacity</span>
+<span class="font-label-md text-label-md text-on-surface font-semibold">9.1 RPE</span>
+</div>
+</div>
+<!-- Expandable Accordion Trigger -->
+<div class="pt-1">
+<button class="w-full flex items-center justify-between text-on-surface-variant hover:text-on-surface transition-colors py-1" onclick="toggleDetails('details-2', this)">
+<span class="font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">visibility</span>
+                View Details &amp; Set Breakdown
+              </span>
+<span class="material-symbols-outlined text-[18px] transition-transform duration-200" id="icon-details-2">expand_more</span>
+</button>
+<div class="hidden flex-col gap-2 pt-2 mt-2 bg-surface-container-lowest/60 rounded-lg p-3" id="details-2">
+<div class="flex justify-between items-center text-primary-container font-label-sm text-label-sm font-semibold">
+<span>Conventional Deadlift (PR)</span>
+<span>3 sets x 3 @ 385 lbs</span>
+</div>
+<div class="flex justify-between items-center text-on-surface font-label-sm text-label-sm">
+<span>Weighted Pull-Ups</span>
+<span>4 sets x 6 @ +35 lbs</span>
+</div>
+<div class="flex justify-between items-center text-on-surface font-label-sm text-label-sm">
+<span>Chest-Supported Row</span>
+<span>4 sets x 10 @ 80 lbs</span>
+</div>
+<div class="flex justify-between items-center text-on-surface font-label-sm text-label-sm">
+<span>Incline Dumbbell Curl</span>
+<span>5 sets x 10 @ 30 lbs</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Entry 3: Oct 21 -->
+<div class="workout-card bg-surface-container rounded-xl p-space-md shadow-md flex flex-col gap-space-sm transition-all" data-type="all custom">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Oct 21 • 06:10 AM</span>
+<div class="flex items-center gap-1 text-on-surface-variant">
+<span class="material-symbols-outlined text-[16px] text-secondary">schedule</span>
+<span class="font-label-sm text-label-sm">61 min</span>
+</div>
+</div>
+<div class="flex items-baseline justify-between">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Legs &amp; Abs Hypertrophy</h3>
+<span class="font-label-sm text-label-sm text-on-surface-variant">20 Sets Complete</span>
+</div>
+<!-- Volume & Highlights Ribbon -->
+<div class="grid grid-cols-3 gap-2 bg-surface-container-high rounded-lg p-2 text-center">
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant block">Volume</span>
+<span class="font-label-md text-label-md text-on-surface font-semibold">19,450 lbs</span>
+</div>
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant block">Squat Peak</span>
+<span class="font-label-md text-label-md text-on-surface font-semibold">275 lbs</span>
+</div>
+<div>
+<span class="font-label-sm text-label-sm text-on-surface-variant block">Total Reps</span>
+<span class="font-label-md text-label-md text-on-surface font-semibold">184</span>
+</div>
+</div>
+<!-- Expandable Accordion Trigger -->
+<div class="pt-1">
+<button class="w-full flex items-center justify-between text-on-surface-variant hover:text-on-surface transition-colors py-1" onclick="toggleDetails('details-3', this)">
+<span class="font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">visibility</span>
+                View Details &amp; Set Breakdown
+              </span>
+<span class="material-symbols-outlined text-[18px] transition-transform duration-200" id="icon-details-3">expand_more</span>
+</button>
+<div class="hidden flex-col gap-2 pt-2 mt-2 bg-surface-container-lowest/60 rounded-lg p-3" id="details-3">
+<div class="flex justify-between items-center text-on-surface font-label-sm text-label-sm">
+<span>Barbell Back Squat</span>
+<span>5 sets x 8 @ 275 lbs</span>
+</div>
+<div class="flex justify-between items-center text-on-surface font-label-sm text-label-sm">
+<span>Romanian Deadlift</span>
+<span>4 sets x 10 @ 225 lbs</span>
+</div>
+<div class="flex justify-between items-center text-on-surface font-label-sm text-label-sm">
+<span>Bulgarian Split Squat</span>
+<span>4 sets x 10 @ 50 lbs</span>
+</div>
+<div class="flex justify-between items-center text-on-surface font-label-sm text-label-sm">
+<span>Hanging Leg Raises</span>
+<span>7 sets x 15 @ Bodyweight</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Entry 4: Oct 20 (Rest Day with Streak Preserved Badge) -->
+<div class="workout-card bg-surface-container/60 rounded-xl p-space-md shadow-sm flex flex-col gap-space-xs transition-all" data-type="all">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Oct 20 • Sunday</span>
+<div class="flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-secondary/15 text-secondary">
+<span class="material-symbols-outlined text-[13px]" style="font-variation-settings: 'FILL' 1;">shield</span>
+<span class="font-label-sm text-label-sm font-semibold">Streak Shield Active</span>
+</div>
+</div>
+<div class="flex items-center justify-between mt-1">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Scheduled Rest Day</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Musculoskeletal recovery window. 15-day streak remains uninterrupted.</p>
+</div>
+</div>
+<div class="flex items-center gap-3 mt-2 pt-2 bg-surface-container-high/40 rounded-lg p-2 text-on-surface-variant font-label-sm text-label-sm">
+<span class="flex items-center gap-1 text-secondary">
+<span class="material-symbols-outlined text-[14px]">bedtime</span>
+              8h 22m Sleep
+            </span>
+<span>•</span>
+<span class="flex items-center gap-1 text-primary-container">
+<span class="material-symbols-outlined text-[14px]">directions_walk</span>
+              9,410 Steps
+            </span>
+</div>
+</div>
+</div>
+</div>
+<!-- Motivational Milestone Delight Card -->
+<div class="bg-surface-container-high rounded-xl p-space-md flex items-center justify-between shadow-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-full bg-primary-container/15 flex items-center justify-center text-primary-container">
+<span class="material-symbols-outlined text-[24px]">flag</span>
+</div>
+<div>
+<span class="font-headline-sm text-headline-sm text-on-surface block">Next Milestone</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Gold Tier Re-evaluation at 150 workouts</span>
+</div>
+</div>
+<div class="flex items-baseline gap-0.5 text-primary-container font-stat-lg text-stat-lg">
+        8<span class="font-label-sm text-label-sm text-on-surface-variant">left</span>
+</div>
+</div>
+</div>
+</div>
+<script>
+  function switchExercise(type) {
+    const tabs = ['bench', 'deadlift', 'squat'];
+    tabs.forEach(t => {
+      const btn = document.getElementById('tab-' + t);
+      if (t === type) {
+        btn.className = "flex-1 py-1.5 px-2 rounded-lg font-label-sm text-label-sm text-center transition-colors bg-surface-container-high text-primary-container font-semibold shadow-sm";
+      } else {
+        btn.className = "flex-1 py-1.5 px-2 rounded-lg font-label-sm text-label-sm text-center transition-colors text-on-surface-variant hover:text-on-surface";
+      }
+    });
+
+    const weight = document.getElementById('ex-weight');
+    const unit = document.getElementById('ex-unit');
+    const base = document.getElementById('ex-base');
+    const sparkLine = document.getElementById('sparkline-line');
+    const sparkFill = document.getElementById('sparkline-fill');
+
+    if (type === 'bench') {
+      weight.textContent = '185';
+      unit.textContent = 'lbs (+30 lbs)';
+      base.textContent = '155 lbs';
+      sparkLine.setAttribute('d', 'M 0 70 L 40 65 L 85 58 L 130 52 L 180 40 L 225 35 L 275 22 L 320 12');
+      sparkFill.setAttribute('d', 'M 0 70 L 40 65 L 85 58 L 130 52 L 180 40 L 225 35 L 275 22 L 320 12 L 320 80 L 0 80 Z');
+    } else if (type === 'deadlift') {
+      weight.textContent = '385';
+      unit.textContent = 'lbs (+45 lbs)';
+      base.textContent = '340 lbs';
+      sparkLine.setAttribute('d', 'M 0 68 L 40 60 L 85 54 L 130 45 L 180 38 L 225 28 L 275 18 L 320 10');
+      sparkFill.setAttribute('d', 'M 0 68 L 40 60 L 85 54 L 130 45 L 180 38 L 225 28 L 275 18 L 320 10 L 320 80 L 0 80 Z');
+    } else if (type === 'squat') {
+      weight.textContent = '275';
+      unit.textContent = 'lbs (+25 lbs)';
+      base.textContent = '250 lbs';
+      sparkLine.setAttribute('d', 'M 0 65 L 40 60 L 85 50 L 130 48 L 180 40 L 225 30 L 275 24 L 320 15');
+      sparkFill.setAttribute('d', 'M 0 65 L 40 60 L 85 50 L 130 48 L 180 40 L 225 30 L 275 24 L 320 15 L 320 80 L 0 80 Z');
+    }
+  }
+
+  function toggleDetails(id, btn) {
+    const el = document.getElementById(id);
+    const icon = document.getElementById('icon-' + id);
+    if (el.classList.contains('hidden')) {
+      el.classList.remove('hidden');
+      el.classList.add('flex');
+      if (icon) icon.style.transform = 'rotate(180deg)';
+    } else {
+      el.classList.add('hidden');
+      el.classList.remove('flex');
+      if (icon) icon.style.transform = 'rotate(0deg)';
+    }
+  }
+
+  function filterLogs(type) {
+    const filters = ['all', 'custom', 'pr'];
+    filters.forEach(f => {
+      const btn = document.getElementById('filter-' + f);
+      if (f === type) {
+        btn.className = "px-3 py-1.5 rounded-full font-label-sm text-label-sm whitespace-nowrap bg-primary-container text-on-primary-container font-semibold transition-colors flex items-center gap-1";
+      } else {
+        btn.className = "px-3 py-1.5 rounded-full font-label-sm text-label-sm whitespace-nowrap bg-surface-container-high text-on-surface-variant hover:text-on-surface transition-colors flex items-center gap-1";
+      }
+    });
+
+    const cards = document.querySelectorAll('.workout-card');
+    cards.forEach(card => {
+      const types = card.getAttribute('data-type') || '';
+      if (type === 'all' || types.includes(type)) {
+        card.style.display = 'flex';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+  }
+</script></main><nav class="fixed bottom-0 inset-x-0 z-50 pb-safe bg-surface/85 backdrop-blur-xl shadow-[0_-1px_12px_rgba(0,0,0,0.5)]" data-active-classes="text-primary-container"><div class="flex justify-around items-center h-20 px-space-xs"><a class="flex flex-col items-center justify-center gap-1 min-w-[44px] min-h-[44px] w-16 h-16 text-on-surface-variant hover:text-on-surface transition-colors" data-path="today" href="#"><span class="material-symbols-outlined text-[24px]">home</span><span class="font-label-sm text-label-sm">Today</span></a><a class="flex flex-col items-center justify-center gap-1 min-w-[44px] min-h-[44px] w-16 h-16 text-on-surface-variant hover:text-on-surface transition-colors" data-path="workout" href="#"><span class="material-symbols-outlined text-[24px]">fitness_center</span><span class="font-label-sm text-label-sm">Workout</span></a><a class="flex flex-col items-center justify-center gap-1 min-w-[44px] min-h-[44px] w-16 h-16 text-on-surface-variant hover:text-on-surface transition-colors" data-path="builder" href="#"><span class="material-symbols-outlined text-[24px]">create_new_folder</span><span class="font-label-sm text-label-sm">Builder</span></a><a aria-current="page" class="flex flex-col items-center justify-center gap-1 min-w-[44px] min-h-[44px] w-16 h-16 transition-colors text-primary-container" data-path="history-and-stats" href="#"><span class="material-symbols-outlined text-[24px]">leaderboard</span><span class="font-label-sm text-label-sm">Stats</span></a></div></nav></body></html>
