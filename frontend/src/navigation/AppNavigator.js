@@ -29,6 +29,7 @@ import { ProfileScreen, ProfileForm } from '../screens/ProfileScreen';
 import { ProgressScreen } from '../screens/ProgressScreen';
 import { TrackerScreen } from '../screens/TrackerScreen';
 import { SummaryScreen } from '../screens/SummaryScreen';
+import { RankingsScreen } from '../screens/RankingsScreen';
 import { colors as c, fonts as f } from '../constants/theme';
 
 const tabs = [
@@ -44,6 +45,7 @@ const titles = {
   exercise: 'Movement guide',
   tracker: 'Live session',
   summary: 'Session complete',
+  rankings: 'Rankings',
   profile: 'Profile & settings',
   onboarding: 'Your fitness blueprint',
 };
@@ -133,6 +135,7 @@ export function AppNavigator() {
       summary: () => (
         <SummaryScreen session={overlay.session} onClose={close} />
       ),
+      rankings: () => <RankingsScreen initialExerciseId={overlay.exerciseId} />,
       profile: () => <ProfileForm onClose={close} />,
       onboarding: () => <ProfileForm onboarding onClose={close} />,
     };

@@ -13,6 +13,8 @@ import {
   publicUser,
 } from './services/auth.js';
 import { calculateProgress } from './services/progress.js';
+import { sessionAchievements } from './services/achievements.js';
+import { streakRankings, exerciseRankings } from './services/rankings.js';
 import { localDate, weekday } from './utils/dates.js';
 import {
   registerSchema,
@@ -456,10 +458,15 @@ export function createApp(db, { limitRequests = true } = {}) {
       if (!current.exercises.some((e) => e.sets.some((s) => s.completed)))
         throw new HttpError(400, 'Complete at least one set before finishing.');
       const finished = new Date();
+      const history = await client.query(
+        "SELECT id,status,finished_at,exercises FROM letsgym.workout_sessions WHERE user_id=$1 AND status='completed' ORDER BY finished_at DESC,id DESC",
+        [req.user.id],
+      );
+      const achievements = sessionAchievements(current, history.rows);
       return (
         await client.query(
           `UPDATE letsgym.workout_sessions SET status='completed', finished_at=$1, duration_seconds=$2,
-        local_date=$3, version=version+1 WHERE id=$4 RETURNING *`,
+        local_date=$3, achievements=$5, version=version+1 WHERE id=$4 RETURNING *`,
           [
             finished,
             Math.max(
@@ -468,6 +475,7 @@ export function createApp(db, { limitRequests = true } = {}) {
             ),
             localDate(finished, req.user.timezone),
             id,
+            JSON.stringify(achievements),
           ],
         )
       ).rows[0];
@@ -528,6 +536,48 @@ export function createApp(db, { limitRequests = true } = {}) {
       activeSession: sessions.rows.find((s) => s.status === 'active') || null,
       history: sessions.rows.filter((s) => s.status === 'completed'),
       progress: calculateProgress(sessions.rows, schedules.rows, today),
+    });
+  });
+
+  app.get('/api/rankings', async (req, res) => {
+    const { exercise_id } = z
+      .object({ exercise_id: z.string().min(1).max(60).optional() })
+      .parse(req.query);
+    let strength = null;
+    if (exercise_id) {
+      const exercise = (
+        await db.query(
+          "SELECT id,name FROM letsgym.exercises WHERE id=$1 AND user_id IS NULL AND NOT archived AND tracking_type='reps'",
+          [exercise_id],
+        )
+      ).rows[0];
+      if (!exercise) throw notFound();
+      const { rows } = await db.query(
+        `SELECT s.user_id,u.name,e.value AS exercise
+         FROM letsgym.workout_sessions s JOIN letsgym.users u ON u.id=s.user_id
+         CROSS JOIN LATERAL jsonb_array_elements(s.exercises) e(value)
+         WHERE s.status='completed' AND e.value->>'exercise_id'=$1`,
+        [exercise_id],
+      );
+      strength = { exercise, ...exerciseRankings(rows, req.user.id) };
+    }
+    const [users, sessions, schedules] = await Promise.all([
+      db.query('SELECT id,name,timezone FROM letsgym.users'),
+      db.query(
+        "SELECT user_id,status,local_date FROM letsgym.workout_sessions WHERE status='completed'",
+      ),
+      db.query(
+        'SELECT user_id,effective_on,days FROM letsgym.schedules ORDER BY effective_on',
+      ),
+    ]);
+    res.json({
+      streaks: streakRankings(
+        users.rows,
+        sessions.rows,
+        schedules.rows,
+        req.user.id,
+      ),
+      strength,
     });
   });
 

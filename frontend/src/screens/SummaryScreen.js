@@ -14,6 +14,7 @@ import {
 } from '../components/UI';
 import { colors as c } from '../constants/theme';
 import { setCount, duration, volume } from '../utils/format';
+import { AchievementCards } from '../components/AchievementCards';
 
 export function SummaryScreen({ session, onClose }) {
   const { data, setTab, run, refresh, busy } = useApp();
@@ -78,6 +79,7 @@ export function SummaryScreen({ session, onClose }) {
           {Math.round(volume(session)).toLocaleString()} kg TOTAL VOLUME
         </Label>
       </Card>
+      <AchievementCards achievements={session.achievements} />
       {session.exercises
         .filter((e) => e.sets.some((s) => s.completed))
         .map((e) => (

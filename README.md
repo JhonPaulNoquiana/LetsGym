@@ -42,6 +42,9 @@ Use `npm run web` in `frontend/` for a browser preview.
 - Search/filter 154 gym exercises by muscle and equipment, with illustrations and instructions.
 - Create private custom exercises, train them individually, or add them to routines.
 - Track repetition-based sets and timed cardio, holds, and carries.
+- Compare current/best streaks and exercise PRs on the leaderboards.
+- Earn saved session acknowledgements for heavier lifts, more reps at the same
+  weight, longer timed sets, and new personal records.
 - Record kg, reps, and sets with an elapsed clock and automatic rest timer.
 - Resume sessions using server saves and local backups of unsynced edits.
 - Finish workouts and review summaries, detailed history, and exercise progress.

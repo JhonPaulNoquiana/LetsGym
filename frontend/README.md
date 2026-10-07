@@ -59,6 +59,23 @@ the longest completed set in seconds and are excluded from lifted-weight volume
 and estimated strength calculations. Illustrations represent movement families;
 they are not exact demonstrations of every variation.
 
+## Rankings and achievements
+
+Open **Progress → View rankings** for current/longest streak boards and per-exercise
+PR boards. Shared repetition-based exercise guides also have **View exercise
+rankings**. Search to select a movement. Heaviest weight ranks first; reps at that
+same weight break ties. Opening an exercise guide automatically shows its top
+athlete, their weight/reps, and all athletes tied for first place. Exact ties share
+a rank. Scores are self-reported.
+Private custom exercises and timed movements are excluded from global PR boards.
+
+Finishing a session shows saved acknowledgement cards for progress over the last
+completed session for each exercise: heavier weight, more reps at the same weight,
+or longer duration. First sessions establish a baseline; beating the all-time
+top set also earns a personal-record badge. These cards remain available by
+expanding the session in workout history. Custom exercises earn personal badges
+without appearing on a shared exercise board.
+
 ## Session persistence
 
 Native tokens use Expo SecureStore; web tokens use sessionStorage. Drafts use

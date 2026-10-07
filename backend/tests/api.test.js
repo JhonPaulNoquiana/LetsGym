@@ -540,6 +540,139 @@ test('timed exercises validate units and save seconds without treating them as r
   assert.equal(record.points[0].value, 600);
 });
 
+test('exercise ranking is private to authenticated viewers, excludes custom and timed movements, and persists improvement badges', async () => {
+  await request(app).get('/api/rankings').expect(401);
+  await request(app)
+    .get('/api/rankings?exercise_id=stationary-bike')
+    .set(auth(owner))
+    .expect(404);
+  const custom = (
+    await db.query(
+      'SELECT id FROM letsgym.exercises WHERE user_id=$1 LIMIT 1',
+      [owner.user.id],
+    )
+  ).rows[0];
+  await request(app)
+    .get(`/api/rankings?exercise_id=${custom.id}`)
+    .set(auth(other))
+    .expect(404);
+  async function complete(user, weight, reps) {
+    const draft = (
+      await request(app)
+        .post('/api/sessions')
+        .set(auth(user))
+        .send({ exercise_id: 'bench-press' })
+        .expect(201)
+    ).body;
+    await request(app)
+      .put(`/api/sessions/${draft.id}`)
+      .set(auth(user))
+      .send({
+        version: draft.version,
+        exercises: [
+          {
+            exercise_id: 'bench-press',
+            sets: [{ weight, reps, completed: true }],
+          },
+        ],
+      })
+      .expect(200);
+    return (
+      await request(app)
+        .post(`/api/sessions/${draft.id}/finish`)
+        .set(auth(user))
+        .expect(200)
+    ).body;
+  }
+  const first = await complete(owner, 70, 6);
+  assert.equal(first.achievements[0].kind, 'baseline');
+  await complete(other, 70, 8);
+  const second = await complete(owner, 70, 9);
+  assert.equal(second.achievements[0].kind, 'more_reps');
+  assert.equal(second.achievements[0].personal_record, true);
+  assert.equal(second.achievements[0].previous_session_id, first.id);
+  const retry = (
+    await request(app)
+      .post(`/api/sessions/${second.id}/finish`)
+      .set(auth(owner))
+      .expect(200)
+  ).body;
+  assert.deepEqual(retry.achievements, second.achievements);
+  const ownerBoard = (
+    await request(app)
+      .get('/api/rankings?exercise_id=bench-press')
+      .set(auth(owner))
+      .expect(200)
+  ).body;
+  const otherBoard = (
+    await request(app)
+      .get('/api/rankings?exercise_id=bench-press')
+      .set(auth(other))
+      .expect(200)
+  ).body;
+  assert.ok(
+    ownerBoard.strength.your_entry.rank < otherBoard.strength.your_entry.rank,
+  );
+  assert.equal(ownerBoard.strength.your_entry.weight, 70);
+  assert.equal(ownerBoard.strength.your_entry.reps, 9);
+  for (const row of [
+    ...ownerBoard.strength.entries,
+    ...ownerBoard.streaks.longest.entries,
+  ])
+    assert.equal(
+      Object.keys(row).some((key) =>
+        /email|password|token|timezone|exercises/.test(key),
+      ),
+      false,
+    );
+  await complete(other, 70, 9);
+  const tied = (
+    await request(app)
+      .get('/api/rankings?exercise_id=bench-press')
+      .set(auth(other))
+      .expect(200)
+  ).body;
+  assert.equal(
+    tied.strength.your_entry.rank,
+    ownerBoard.strength.your_entry.rank,
+  );
+  const active = (
+    await request(app)
+      .post('/api/sessions')
+      .set(auth(other))
+      .send({ exercise_id: 'bench-press' })
+      .expect(201)
+  ).body;
+  await request(app)
+    .put(`/api/sessions/${active.id}`)
+    .set(auth(other))
+    .send({
+      version: active.version,
+      exercises: [
+        {
+          exercise_id: 'bench-press',
+          sets: [{ weight: 500, reps: 90, completed: true }],
+        },
+      ],
+    })
+    .expect(200);
+  const stillTied = (
+    await request(app)
+      .get('/api/rankings?exercise_id=bench-press')
+      .set(auth(other))
+      .expect(200)
+  ).body;
+  assert.equal(stillTied.strength.your_entry.weight, 70);
+  await request(app)
+    .delete(`/api/sessions/${active.id}`)
+    .set(auth(other))
+    .expect(204);
+  const saved = (
+    await request(app).get('/api/dashboard').set(auth(owner))
+  ).body.history.find((s) => s.id === second.id);
+  assert.deepEqual(saved.achievements, second.achievements);
+});
+
 test('logout revokes the token immediately', async () => {
   await request(app).post('/api/auth/logout').set(auth(owner)).expect(204);
   await request(app).get('/api/dashboard').set(auth(owner)).expect(401);

@@ -42,6 +42,7 @@ All `/api` endpoints except registration/login require `Authorization: Bearer TO
 | PUT | `/api/exercises/:id` | Edit an owned custom exercise |
 | DELETE | `/api/exercises/:id` | Hide an owned exercise; preserve existing routines/history |
 | GET | `/api/dashboard` | Profile, exercises, workouts, schedule, session, history, progress |
+| GET | `/api/rankings?exercise_id=bench-press` | Current/longest streaks and optional shared exercise PR leaderboard |
 | PUT | `/api/profile` | Profile/preferences |
 | POST | `/api/workouts` | Create custom workout |
 | PUT | `/api/workouts/:id` | Edit owned workout |
@@ -64,6 +65,31 @@ For compatibility, `target_reps` and set `reps` hold the numeric value in that
 exercise's unit: 1–100 repetitions or 1–7200 seconds. Session snapshots preserve
 the unit and name. Timed exercises are excluded from weight-volume and estimated
 1RM calculations; their trend reports the longest completed set duration.
+
+## Rankings and session achievements
+
+Rankings require authentication and return display names, scores, ranks, and
+account IDs, without emails, credentials, or another user's full workout history.
+Streaks follow the same effective-date schedules and account timezones as personal
+progress. Current and all-time longest streaks have separate boards; zero streaks
+are not ranked. Exact ties share competition ranks (1, 1, 3). Each board shows 50
+entries and the caller's position even when outside that list.
+
+Exercise PR rankings include only shared repetition-based exercises and completed
+sessions/sets. Each account contributes its heaviest actual set, using reps **at
+that weight** to break a tie. Weight wins even if another athlete has more reps at
+a lower load. Private custom and timed exercises are excluded. Scores are
+self-reported. A bodyweight set has zero added load and is ranked by reps.
+
+On completion, `session.achievements` is computed and saved in the same transaction.
+The comparison is the previous completed session containing that exercise, even
+if it belonged to another routine. A heavier top set, extra reps at any identical
+previously used load, or a longer timed set earns an acknowledgement. More reps
+only at a lower load do not count as rep progress. First sessions establish a
+baseline. A new all-time top set (weight, then reps), or longest duration, earns a
+personal-record badge in addition to the improvement acknowledgement. Retries
+return the same saved badges. Older sessions retain an empty badge list; they
+still contribute to rankings. Rewards are acknowledgements, not points or money.
 
 Input uses Zod validation. Queries are parameterized and scoped by account.
 Authentication requests are rate-limited. Password hashes never leave the API.

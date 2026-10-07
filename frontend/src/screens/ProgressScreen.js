@@ -22,7 +22,9 @@ import {
   Empty,
   Icon,
   ScreenTitle,
+  Button,
 } from '../components/UI';
+import { AchievementCards } from '../components/AchievementCards';
 import { colors as c } from '../constants/theme';
 import {
   dateLabel,
@@ -113,6 +115,7 @@ export function HistoryCard({ session }) {
           <Icon name={expanded ? 'chevron-up' : 'chevron-down'} size={16} />
         </Row>
       </Pressable>
+      {expanded && <AchievementCards achievements={session.achievements} />}
       {expanded &&
         session.exercises
           .filter((e) => e.sets.some((s) => s.completed))
@@ -144,7 +147,7 @@ export function HistoryCard({ session }) {
   );
 }
 export function ProgressScreen() {
-  const { data, setTab } = useApp();
+  const { data, setTab, setOverlay } = useApp();
   const { progress, today, history } = data;
   const [selected, setSelected] = useState(null);
   const [filter, setFilter] = useState('All');
@@ -186,6 +189,11 @@ export function ProgressScreen() {
           color={c.cyan}
         />
       </Row>
+      <Button
+        title="View rankings"
+        icon="award"
+        onPress={() => setOverlay({ type: 'rankings' })}
+      />
       <Card style={{ gap: 18 }}>
         <Row style={{ justifyContent: 'space-between' }}>
           <Heading small>Last 28 days</Heading>

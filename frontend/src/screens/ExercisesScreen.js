@@ -15,6 +15,7 @@ import {
   ScreenTitle,
 } from '../components/UI';
 import { ExerciseArt } from '../components/ExerciseArt';
+import { ExerciseLeader } from '../components/ExerciseLeader';
 import { ExerciseForm } from './ExerciseForm';
 import { api } from '../services/api';
 import { colors as c, fonts as f } from '../constants/theme';
@@ -218,7 +219,7 @@ export function ExercisesScreen() {
   );
 }
 export function ExerciseDetail({ exercise, onClose }) {
-  const { data, busy, run, setData, startWorkout } = useApp();
+  const { data, busy, run, setData, startWorkout, setOverlay } = useApp();
   const [editing, setEditing] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
   exercise = data.exercises.find((e) => e.id === exercise.id) || exercise;
@@ -235,7 +236,6 @@ export function ExerciseDetail({ exercise, onClose }) {
     );
   return (
     <Page>
-      <ExerciseArt type={exercise.illustration} height={230} />
       <Label color={c.cyan}>
         {exercise.muscle} · {exercise.equipment}
       </Label>
@@ -246,6 +246,18 @@ export function ExerciseDetail({ exercise, onClose }) {
           : 'LOG REPETITIONS PER SET'}
         {owned ? ' · YOUR CUSTOM EXERCISE' : ''}
       </Label>
+      <ExerciseLeader
+        key={exercise.id}
+        exercise={exercise}
+        onRankings={() =>
+          setOverlay({
+            type: 'rankings',
+            exerciseId: exercise.id,
+            returnTo: { type: 'exercise', exercise },
+          })
+        }
+      />
+      <ExerciseArt type={exercise.illustration} height={230} />
       <Heading small>Make every rep count.</Heading>
       {exercise.instructions.map((instruction, i) => (
         <Row key={i} style={{ alignItems: 'flex-start' }}>

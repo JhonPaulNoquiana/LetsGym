@@ -9,6 +9,8 @@ Original feature and design references are preserved.
 | Custom builder | Name, add/remove/reorder exercises, target sets/reps/optional kg, edit/delete |
 | Exercise library | 154 movements, muscle/equipment filters, instructions, local SVG illustrations, paginated results |
 | Custom exercises | Private creation/editing/deletion, repetitions or seconds, standalone training and routine integration |
+| Rankings | Current/longest scheduled-day streaks; shared exercise PRs ordered by weight then reps from the same set; exact ties share ranks |
+| Session acknowledgements | Persisted baseline/improvement/PR badges, previous-session comparisons, visible in summary and history |
 | Today's workout | Profile-local date, scheduled routine, targets, start/resume |
 | Live tracker | kg/reps, complete sets, add/remove sets, next/previous exercise, elapsed time |
 | Rest timer | Auto-start after set, skip, +30 seconds, timestamp persistence |
@@ -22,7 +24,7 @@ Original feature and design references are preserved.
 
 Retains charcoal, electric lime, cyan, technical typography, metric cards, weekly
 calendar, set rows, and bottom navigation. Uses LetsGym branding and five MVP
-tabs. Ranking/XP, recovery scores, wearable integrations, and biometric claims
+tabs. XP, recovery scores, wearable integrations, and biometric claims
 from the examples are outside the requested MVP. The app displays actual account
 data and empty states. Illustrations are local vectors, with written instructions.
 Weights use kg. Supabase provides PostgreSQL; Express handles authentication.
@@ -31,7 +33,7 @@ Weights use kg. Supabase provides PostgreSQL; Express handles authentication.
 
 Checked October 7, 2026:
 
-- 19 local automated PostgreSQL checks and 19 live Supabase checks pass.
+- 29 local automated PostgreSQL checks and 29 live Supabase checks pass.
   Automated coverage: hashing/authentication/logout, input validation,
   owner isolation, immutable templates, custom edits, schedule validation,
   active-session resume, stale-save rejection, idempotent completion,
@@ -39,6 +41,9 @@ Checked October 7, 2026:
   Coverage also includes catalog uniqueness/idempotence, private custom exercises,
   standalone sessions, archived exercise reuse in existing routines, fixed tracking
   units, and duration trends without estimated strength calculations.
+  Ranking coverage includes heaviest-set/reps ordering, exact shared ties,
+  authenticated access, private/timed exclusions, account timezones, top-50 caller
+  positions, and persisted/idempotent baseline, improvement, and PR badges.
 - API checks also run against live Supabase using temporary accounts removed
   afterward.
 - Browser checks at 412 × 915 cover onboarding, scheduling, custom routine
@@ -49,6 +54,9 @@ Checked October 7, 2026:
   Additional browser checks cover private exercise creation/editing/deletion,
   timed standalone training/completion/progress, library pagination and personal
   filtering, and inline exercise creation without losing the routine draft.
+  Ranking browser checks cover current/longest streak views, exercise selection,
+  weight/reps ordering, empty boards, failed-request retry, and saved PR cards in
+  both the completion summary and expanded history.
 
 - Android, iOS, and web production bundle exports pass; Expo dependency
   compatibility checks pass.
@@ -60,7 +68,7 @@ Checked October 7, 2026:
   fully offline database synchronization system.
 - Native device installation, SecureStore, keyboards, and background behavior
   still require physical Android/iOS validation.
-- Email confirmation/reset, social auth, wearables, reminders, XP/ranking, and
+- Email confirmation/reset, social auth, wearables, reminders, XP, and
   subscriptions are outside this MVP.
 - Frontend `npm audit` reports 22 advisories (7 moderate, 15 high) in the Expo
   dependency tree, originating in transitive `braces`, `node-forge`, and `uuid`.
