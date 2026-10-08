@@ -30,6 +30,18 @@ Restart Expo after `.env` changes. Add the frontend's browser origin to backend
 `CORS_ORIGINS` when previewing over LAN. Never put database credentials in an
 `EXPO_PUBLIC_` variable.
 
+## iPhone Home Screen web app
+
+Set `EXPO_PUBLIC_API_URL` to the deployed HTTPS API origin, then run
+`npm run build:web`. The generated `dist/` directory includes standalone web app
+metadata, icons, and iPhone viewport settings. The root Render Blueprint includes
+a free Static Site for this build. Add its assigned HTTPS origin to the backend's
+`CORS_ORIGINS` before testing sign-in and saving.
+
+Open the deployed link in Safari, choose **Share → Add to Home Screen**, and launch
+LetsGym from its icon. This version requires internet access and does not cache
+private API data. See [the complete deployment guide](../architecture/web-deployment.md).
+
 ## Build an Android APK locally (Windows)
 
 Install Java 21 and the Android SDK, and set `JAVA_HOME` and `ANDROID_HOME`.
@@ -43,7 +55,7 @@ npm ci
 $env:NODE_ENV = "production"
 npx expo prebuild --platform android --no-install
 Push-Location android
-.\gradlew.bat assembleRelease --no-daemon
+.\gradlew.bat assembleRelease --no-daemon --max-workers=2 --no-parallel '-Pkotlin.compiler.execution.strategy=in-process'
 Pop-Location
 ```
 
@@ -51,6 +63,10 @@ The APK is at `android/app/build/outputs/apk/release/app-release.apk`.
 This local build uses the generated development signing key and is intended for
 testing. It includes the JavaScript bundle and does not need Expo Go or Metro.
 Use a private release signing key before publishing to a store.
+
+The limited worker count reduces memory pressure during local builds. Keep the
+same signing key and increase `android.versionCode` in `app.json` for each APK
+update. The current app version is 1.0.1 (Android version code 2).
 
 A LAN API address requires the phone and backend computer on the same network,
 the backend running, and port 3000 reachable. `app.config.js` enables Android HTTP
@@ -112,7 +128,9 @@ without appearing on a shared exercise board.
 
 ## Session persistence
 
-Native tokens use Expo SecureStore; web tokens use sessionStorage. Drafts use
+Native tokens use Expo SecureStore; web tokens use localStorage so Home Screen
+sign-in survives closing and reopening the app. Restricted browsers fall back to
+memory for the current session. Sign-out clears saved web tokens. Drafts use
 AsyncStorage namespaced by account/session. Edits are backed up locally, then
 saved serially with optimistic versions. Retry failed saves before finishing.
 On resume, unsynced edits are restored when the server version matches. A newer

@@ -1,5 +1,11 @@
 import { Platform } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
+import { createWebTokenStorage } from './webTokenStorage';
+
+const webStorage = createWebTokenStorage(
+  () => window.localStorage,
+  () => window.sessionStorage,
+);
 
 const base = (
   process.env.EXPO_PUBLIC_API_URL ||
@@ -13,14 +19,13 @@ export const setUnauthorizedHandler = (handler) => {
 export const tokenStorage = {
   async get() {
     return Platform.OS === 'web'
-      ? sessionStorage.getItem('letsgym.token')
+      ? webStorage.get()
       : SecureStore.getItemAsync('letsgym.token');
   },
   async set(value) {
     token = value;
     if (Platform.OS === 'web') {
-      if (value) sessionStorage.setItem('letsgym.token', value);
-      else sessionStorage.removeItem('letsgym.token');
+      webStorage.set(value);
     } else if (value) await SecureStore.setItemAsync('letsgym.token', value);
     else await SecureStore.deleteItemAsync('letsgym.token');
   },
@@ -56,7 +61,7 @@ export async function api(path, { method = 'GET', body } = {}) {
       throw new Error('The server took too long to respond. Please retry.');
     if (error instanceof TypeError)
       throw new Error(
-        `Cannot reach the server. Check that the backend is running and EXPO_PUBLIC_API_URL points to your computer.`,
+        'Cannot reach the server. Check your internet connection and try again shortly.',
       );
     throw error;
   } finally {

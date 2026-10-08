@@ -33,6 +33,9 @@ must be on the same network. Restart Expo after changing environment variables.
 Android emulators default to `http://10.0.2.2:3000`. Browsers and the iOS simulator
 default to `http://localhost:3000`. The iOS simulator requires macOS.
 Use `npm run web` in `frontend/` for a browser preview.
+For a hosted iPhone Home Screen app, follow the
+[web deployment guide](architecture/web-deployment.md). This uses the existing
+Render API without Expo Go or an Apple developer membership.
 
 Configure Google sign-in using [architecture/google-sign-in.md](architecture/google-sign-in.md).
 It requires Google OAuth enabled in Supabase plus the public Auth settings in
@@ -77,7 +80,7 @@ Express authenticates requests and scopes database queries to their owner.
 Supabase Auth verifies Google identities; Express validates them with the Auth
 server and issues app sessions. Express also provides scrypt password login and
 single-use email-code recovery with session revocation. Random session tokens are stored as hashes
-in PostgreSQL and in SecureStore on native devices (sessionStorage on web).
+in PostgreSQL and in SecureStore on native devices (localStorage on web).
 Tables live in the private `letsgym` schema with default-deny RLS and are not
 exposed through Supabase's public Data API. Existing Gmail accounts retain their
 workout data when connected to their verified Google account. See the setup guide
@@ -87,7 +90,8 @@ for ownership verification of existing accounts with third-party email addresses
 
 For hosted backend setup, follow the
 [Render deployment guide](architecture/render-deployment.md). The root
-[render.yaml](render.yaml) defines the backend service using the existing Supabase database.
+[render.yaml](render.yaml) defines the backend service using the existing Supabase
+database and a free static web frontend.
 
 Run `npm test` in `backend/` for isolated PostgreSQL integration/regression tests.
 Run `npx expo export --platform android --platform ios --platform web` in

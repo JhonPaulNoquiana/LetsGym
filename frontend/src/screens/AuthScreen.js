@@ -20,6 +20,8 @@ import {
   Button,
 } from '../components/UI';
 import { api } from '../services/api';
+import { HomeScreenHint } from '../components/HomeScreenHint';
+import { isAppleMobileBrowser } from '../utils/browserPlatform';
 import { colors as c, fonts as f } from '../constants/theme';
 
 function GoogleMark() {
@@ -100,6 +102,10 @@ export function AuthScreen() {
     }
   }
   function googleSignIn() {
+    if (Platform.OS === 'web' && isAppleMobileBrowser(navigator)) {
+      setError('Google sign-in is not supported on iOS in this version. Please use your username/email and password.');
+      return;
+    }
     if (Platform.OS === 'ios') {
       Alert.alert(
         'Google sign-in unavailable on iOS',
@@ -333,6 +339,7 @@ export function AuthScreen() {
           </>
         )}
       </Card>
+      <HomeScreenHint />
       <Row style={{ justifyContent: 'center', gap: 20 }}>
         <Row>
           <Icon name="check-circle" color={c.cyan} size={14} />

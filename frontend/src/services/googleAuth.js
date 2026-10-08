@@ -6,6 +6,7 @@ import * as Linking from 'expo-linking';
 import * as SecureStore from 'expo-secure-store';
 import * as WebBrowser from 'expo-web-browser';
 import { makeRedirectUri } from 'expo-auth-session';
+import { isAppleMobileBrowser } from '../utils/browserPlatform';
 import {
   googleAuthorizeUrl,
   parseGoogleCallback,
@@ -132,7 +133,7 @@ export async function restoreGoogleSignIn() {
 }
 
 export async function startGoogleSignIn() {
-  if (Platform.OS === 'ios')
+  if (Platform.OS === 'ios' || (Platform.OS === 'web' && isAppleMobileBrowser(navigator)))
     throw new Error(
       'Google sign-in is not supported on iOS in this version. Please sign in with your username/email and password.',
     );
