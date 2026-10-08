@@ -7,11 +7,23 @@ import request from 'supertest';
 import { createApp } from '../src/app.js';
 import { createDatabase } from '../src/config/database.js';
 import { seed, exercises } from '../src/services/seed.js';
+import { issueSession } from '../src/services/auth.js';
 
 let db, embedded, app, owner, other, workout, active;
 const userIds = [];
 const email = `letsgym-test-${randomUUID()}@example.test`;
-const password = 'test-only-password-2026';
+const identities = new Map();
+function googleFixture(email, name) {
+  const token = `fixture.${randomUUID().replaceAll('-', '')}.signature`;
+  identities.set(token, {
+    authId: randomUUID(),
+    subject: randomUUID(),
+    email,
+    name,
+    canLinkByEmail: email.endsWith('@gmail.com'),
+  });
+  return token;
+}
 const planId = '10000000-0000-4000-8000-000000000004';
 const body = {
   name: 'Integration Routine',
@@ -44,7 +56,16 @@ before(async () => {
       await embedded.exec(await readFile(new URL(file, directory), 'utf8'));
     await seed(db);
   }
-  app = createApp(db, { limitRequests: false });
+  app = createApp(db, {
+    limitRequests: false,
+    verifyGoogle: async (token) => {
+      if (!identities.has(token))
+        throw Object.assign(new Error('Invalid Google sign-in.'), {
+          status: 401,
+        });
+      return identities.get(token);
+    },
+  });
 });
 after(async () => {
   for (const id of userIds)
@@ -52,41 +73,124 @@ after(async () => {
   if (embedded) await embedded.close();
   else await db.end();
 });
-test('accounts hash passwords, sign in, and return safe profiles', async () => {
+test('Google accounts create once, sign in again, and return only safe profiles', async () => {
+  const access_token = googleFixture(email, 'Test Owner');
   const result = await request(app)
-    .post('/api/auth/register')
-    .send({ name: 'Test Owner', email, password, timezone: 'Asia/Manila' })
+    .post('/api/auth/google')
+    .send({
+      access_token,
+      name: 'Forged name',
+      email: 'forged@example.test',
+      timezone: 'Asia/Manila',
+    })
     .expect(201);
   owner = result.body;
   userIds.push(owner.user.id);
   assert.equal(owner.user.password_hash, undefined);
+  assert.equal(owner.user.google_subject, undefined);
+  assert.equal(owner.user.supabase_auth_id, undefined);
+  assert.equal(owner.user.name, 'Test Owner');
+  assert.equal(owner.user.email, email);
+  assert.equal(owner.isNewUser, true);
   assert.ok(owner.token);
   const row = (
     await db.query('SELECT password_hash FROM letsgym.users WHERE id=$1', [
       owner.user.id,
     ])
   ).rows[0];
-  assert.notEqual(row.password_hash, password);
+  assert.equal(row.password_hash, null);
   await request(app)
-    .post('/api/auth/login')
-    .send({ email, password: 'incorrect-password' })
+    .post('/api/auth/google')
+    .send({ access_token: 'invalid.untrusted.signature' })
     .expect(401);
-  await request(app)
-    .post('/api/auth/login')
-    .send({ email, password })
+  const again = await request(app)
+    .post('/api/auth/google')
+    .send({ access_token })
     .expect(200);
+  assert.equal(again.body.user.id, owner.user.id);
+  assert.equal(again.body.isNewUser, false);
   const second = await request(app)
-    .post('/api/auth/register')
-    .send({ name: 'Test Other', email: `other-${email}`, password })
+    .post('/api/auth/google')
+    .send({ access_token: googleFixture(`other-${email}`, 'Test Other') })
     .expect(201);
   other = second.body;
   userIds.push(other.user.id);
   await request(app)
-    .post('/api/auth/register')
-    .send({ name: 'Duplicate', email, password })
+    .post('/api/auth/login')
+    .send({ email, password: 'old-password' })
+    .expect(401);
+});
+test('Google migration preserves legacy Gmail account IDs and routines without accepting another identity', async () => {
+  const legacyEmail = `legacy-${randomUUID()}@gmail.com`;
+  const legacy = (
+    await db.query(
+      'INSERT INTO letsgym.users(email,name,password_hash) VALUES($1,$2,$3) RETURNING *',
+      [legacyEmail, 'Existing athlete', 'legacy-password-hash'],
+    )
+  ).rows[0];
+  userIds.push(legacy.id);
+  const legacyToken = await issueSession(db, legacy.id);
+  const saved = (
+    await db.query(
+      'INSERT INTO letsgym.workouts(user_id,name,exercises) VALUES($1,$2,$3) RETURNING id',
+      [legacy.id, 'Keep my routine', JSON.stringify(body.exercises)],
+    )
+  ).rows[0];
+  const access_token = googleFixture(legacyEmail, 'Google name');
+  const result = await request(app)
+    .post('/api/auth/google')
+    .send({ access_token })
+    .expect(200);
+  assert.equal(result.body.user.id, legacy.id);
+  assert.equal(result.body.user.name, 'Existing athlete');
+  assert.equal(result.body.isNewUser, false);
+  const dashboard = await request(app)
+    .get('/api/dashboard')
+    .set(auth(result.body))
+    .expect(200);
+  assert.ok(dashboard.body.workouts.some((item) => item.id === saved.id));
+  await request(app)
+    .get('/api/dashboard')
+    .set({ Authorization: `Bearer ${legacyToken}` })
+    .expect(401);
+  await request(app)
+    .post('/api/auth/google')
+    .send({
+      access_token: googleFixture(legacyEmail, 'Another Google identity'),
+    })
     .expect(409);
 });
+test('third-party email collisions require separate ownership verification and leave data intact', async () => {
+  const legacyEmail = `legacy-${randomUUID()}@example.test`;
+  const legacy = (
+    await db.query(
+      'INSERT INTO letsgym.users(email,name,password_hash) VALUES($1,$2,$3) RETURNING *',
+      [legacyEmail, 'Existing athlete', 'keep-this-hash'],
+    )
+  ).rows[0];
+  userIds.push(legacy.id);
+  await request(app)
+    .post('/api/auth/google')
+    .send({
+      access_token: googleFixture(legacyEmail, 'Do not replace'),
+    })
+    .expect(409);
+  const row = (
+    await db.query('SELECT * FROM letsgym.users WHERE id=$1', [legacy.id])
+  ).rows[0];
+  assert.equal(row.password_hash, 'keep-this-hash');
+  assert.equal(row.google_subject, null);
+  assert.equal(row.name, 'Existing athlete');
+});
 test('authentication and schema validation reject malformed input', async () => {
+  await request(app)
+    .post('/api/auth/google')
+    .send({ access_token: 'not-a-token' })
+    .expect(400);
+  await request(app)
+    .post('/api/auth/google')
+    .send({ access_token: 'invalid.untrusted.signature', timezone: 'bad-zone' })
+    .expect(400);
   await request(app).get('/api/dashboard').expect(401);
   await request(app)
     .post('/api/workouts')

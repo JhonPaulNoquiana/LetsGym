@@ -2,15 +2,19 @@
   "expo": {
     "name": "LetsGym",
     "slug": "letsgym",
+    "scheme": "letsgym",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "dark",
     "backgroundColor": "#0B0F17",
     "ios": {
+      "bundleIdentifier": "com.jhonpaulnoquiana.letsgym",
       "supportsTablet": true
     },
     "android": {
+      "package": "com.jhonpaulnoquiana.letsgym",
+      "versionCode": 1,
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/android-icon-foreground.png",
@@ -23,6 +27,7 @@
     },
     "plugins": [
       "expo-secure-store",
+      "expo-web-browser",
       "expo-font"
     ]
   }

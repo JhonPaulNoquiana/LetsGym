@@ -2,10 +2,11 @@
   "name": "letsgym-backend",
   "version": "1.0.0",
   "private": true,
-  "description": "LetsGym Express backend placeholder",
+  "description": "LetsGym fitness tracking API",
   "type": "module",
   "scripts": {
     "start": "node src/index.js",
+    "start:render": "npm run db:migrate && node src/index.js",
     "dev": "node --watch src/index.js",
     "db:migrate": "node scripts/migrate.js",
     "test": "node --test --test-concurrency=1"
@@ -19,6 +20,7 @@
     "express": "^5.2.1",
     "express-rate-limit": "^8.7.1",
     "helmet": "^8.3.0",
+    "nodemailer": "^10.0.16",
     "pg": "^8.23.1",
     "zod": "^4.6.5"
   },

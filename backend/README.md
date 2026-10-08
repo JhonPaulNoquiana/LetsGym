@@ -28,15 +28,30 @@ supplied Supabase `postgres` role does so.
 `CORS_ORIGINS` is a comma-separated list of allowed browser origins. Add the
 frontend's LAN web preview origin when needed. Native requests have no browser origin.
 
-## API
+## Render deployment
 
-All `/api` endpoints except registration/login require `Authorization: Bearer TOKEN`.
+Use the root [render.yaml](../render.yaml) and follow the
+[step-by-step Render guide](../architecture/render-deployment.md).
+`npm run start:render` applies migrations before startup. Render Free blocks
+Gmail SMTP; the selected Google Apps Script + Gmail sender uses HTTPS instead.
+See [Apps Script email setup](../architecture/apps-script-email.md).
+
+## API endpoints
+
+Configure Google OAuth and both public Auth environment settings using
+[architecture/google-sign-in.md](../architecture/google-sign-in.md).
+Registration, login, Google sign-in, and password recovery are public and rate-limited.
+Other `/api` endpoints require `Authorization: Bearer TOKEN`.
+See [password-sign-in.md](../architecture/password-sign-in.md) for email setup.
 
 | Method | Endpoint | Purpose |
 | --- | --- | --- |
 | GET | `/health` | Database connectivity |
-| POST | `/api/auth/register` | Account creation and 30-day session |
-| POST | `/api/auth/login` | Sign in |
+| POST | `/api/auth/google` | Verify Supabase Google access token; create/connect account and issue a 30-day app session |
+| POST | `/api/auth/register` | Create account with name, username, email, password, and timezone |
+| POST | `/api/auth/login` | Sign in with identifier (username/email) and password |
+| POST | `/api/auth/forgot-password` | Request a recovery code by email |
+| POST | `/api/auth/reset-password` | Consume email/code and change password; revoke existing sessions |
 | POST | `/api/auth/logout` | Revoke current session |
 | POST | `/api/exercises` | Create a private custom exercise |
 | PUT | `/api/exercises/:id` | Edit an owned custom exercise |
@@ -92,7 +107,10 @@ return the same saved badges. Older sessions retain an empty badge list; they
 still contribute to rankings. Rewards are acknowledgements, not points or money.
 
 Input uses Zod validation. Queries are parameterized and scoped by account.
-Authentication requests are rate-limited. Password hashes never leave the API.
+Authentication requests are rate-limited. Google identities are verified with
+Supabase Auth; client-supplied emails/names are not accepted as identity proof.
+Password sign-in and registration are supported, with scrypt hashes and email-code recovery. Password hashes and
+provider identity IDs never leave the API.
 Completed sessions preserve workout/exercise snapshots after routine edits/deletions.
 
 ## Progress rules

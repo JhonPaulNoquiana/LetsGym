@@ -11,8 +11,12 @@ npm install
 npm start
 ```
 
-Start the backend first. Use Expo Go or an Android emulator. `npm run web` opens
+Start the backend first. Use an installed/development build or an Android emulator. `npm run web` opens
 a browser preview. The iOS simulator requires macOS.
+
+Google sign-in configuration and redirects are documented in
+[architecture/google-sign-in.md](../architecture/google-sign-in.md).
+Expo Go does not support this OAuth flow; use the web preview or a native build.
 
 ## API address
 
@@ -26,9 +30,39 @@ Restart Expo after `.env` changes. Add the frontend's browser origin to backend
 `CORS_ORIGINS` when previewing over LAN. Never put database credentials in an
 `EXPO_PUBLIC_` variable.
 
+## Build an Android APK locally (Windows)
+
+Install Java 21 and the Android SDK, and set `JAVA_HOME` and `ANDROID_HOME`.
+Set `EXPO_PUBLIC_API_URL` in `.env` before building; the address is bundled into
+the APK and changing it requires rebuilding.
+
+From `frontend/` in PowerShell:
+
+```powershell
+npm ci
+$env:NODE_ENV = "production"
+npx expo prebuild --platform android --no-install
+Push-Location android
+.\gradlew.bat assembleRelease --no-daemon
+Pop-Location
+```
+
+The APK is at `android/app/build/outputs/apk/release/app-release.apk`.
+This local build uses the generated development signing key and is intended for
+testing. It includes the JavaScript bundle and does not need Expo Go or Metro.
+Use a private release signing key before publishing to a store.
+
+A LAN API address requires the phone and backend computer on the same network,
+the backend running, and port 3000 reachable. `app.config.js` enables Android HTTP
+traffic only when the configured API URL starts with `http://`. For remote use,
+deploy the backend with HTTPS, change the API URL, and rebuild.
+
 ## Flow
 
-Register/login → goal and experience → schedule → today's workout → log sets
+Register/sign in with username/email and password → goal and experience → schedule → today's workout → log sets
+
+Password login supports Expo Go on iPhone. Google displays an unavailable alert
+on iOS. See [email recovery setup](../architecture/password-sign-in.md).
 and rest → finish → summary → history and progress.
 
 The five tabs are **Home**, **Workout**, **Exercises**, **Progress**, and **Profile**.
@@ -99,6 +133,7 @@ Only completed sets count; discarded sessions do not affect progress.
 ## Validation
 
 ```sh
+npm test
 npx expo install --check
 npx expo export --platform android --platform ios --platform web
 ```

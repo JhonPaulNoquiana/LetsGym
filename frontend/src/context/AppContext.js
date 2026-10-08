@@ -12,6 +12,7 @@ import {
   setToken,
   setUnauthorizedHandler,
 } from '../services/api';
+import { startGoogleSignIn, restoreGoogleSignIn } from '../services/googleAuth';
 
 const Context = createContext(null);
 export const useApp = () => useContext(Context);
@@ -35,9 +36,12 @@ export function AppProvider({ children }) {
   }, []);
   useEffect(() => {
     setUnauthorizedHandler(logoutLocal);
-    tokenStorage
-      .get()
-      .then(async (value) => {
+    (async () => {
+      const googleSession = await restoreGoogleSignIn();
+      if (googleSession) {
+        await acceptGoogleSession(googleSession);
+      } else {
+        const value = await tokenStorage.get();
         if (value) {
           setToken(value);
           setAuthenticated(true);
@@ -47,8 +51,9 @@ export function AppProvider({ children }) {
             setError(e.message);
           }
         }
-      })
-      .catch(() => setError('Could not load your saved session.'))
+      }
+    })()
+      .catch((e) => setError(e.message || 'Could not load your saved session.'))
       .finally(() => setLoading(false));
     return () => setUnauthorizedHandler(() => {});
   }, [logoutLocal]);
@@ -81,16 +86,42 @@ export function AppProvider({ children }) {
       setBusy(false);
     }
   }, []);
-  async function authenticate(mode, values) {
+  async function acceptGoogleSession(session) {
+    const result = await api('/auth/google', {
+      method: 'POST',
+      body: {
+        access_token: session.access_token,
+        timezone:
+          Intl.DateTimeFormat().resolvedOptions().timeZone || 'Asia/Manila',
+      },
+    });
+    await tokenStorage.set(result.token);
+    setAuthenticated(true);
+    if (result.isNewUser) setOverlay({ type: 'onboarding' });
+    await refresh();
+    return result;
+  }
+  async function authenticate() {
+    return run(async () => {
+      const session = await startGoogleSignIn();
+      if (session) return acceptGoogleSession(session);
+      return null;
+    });
+  }
+  async function authenticatePassword(mode, body) {
     return run(async () => {
       const result = await api(`/auth/${mode}`, {
         method: 'POST',
-        body: values,
+        body: {
+          ...body,
+          timezone:
+            Intl.DateTimeFormat().resolvedOptions().timeZone || 'Asia/Manila',
+        },
       });
       await tokenStorage.set(result.token);
       setAuthenticated(true);
+      if (result.isNewUser) setOverlay({ type: 'onboarding' });
       await refresh();
-      if (mode === 'register') setOverlay({ type: 'onboarding' });
       return result;
     });
   }
@@ -135,6 +166,7 @@ export function AppProvider({ children }) {
         run,
         refresh,
         authenticate,
+        authenticatePassword,
         logout,
         startWorkout,
       }}

@@ -47,5 +47,6 @@ Desktop.ini
 
 # Local verification artifacts
 .playwright-cli/
+.playwright-mcp/
 output/
 audit-report.json

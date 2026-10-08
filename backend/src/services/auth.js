@@ -1,25 +1,30 @@
 import {
   randomBytes,
+  createHash,
   scrypt as scryptCallback,
   timingSafeEqual,
-  createHash,
 } from 'node:crypto';
 import { promisify } from 'node:util';
 
 const scrypt = promisify(scryptCallback);
-export const hashToken = (token) =>
-  createHash('sha256').update(token).digest('hex');
 export async function hashPassword(password) {
   const salt = randomBytes(16).toString('hex');
-  const derived = await scrypt(password, salt, 64);
-  return `${salt}:${derived.toString('hex')}`;
+  return `${salt}:${(await scrypt(password, salt, 64)).toString('hex')}`;
 }
+const dummyHash = `00000000000000000000000000000000:${'00'.repeat(64)}`;
 export async function verifyPassword(password, stored) {
-  const [salt, expected] = stored.split(':');
+  const [salt, expected] = (stored || dummyHash).split(':');
   const derived = await scrypt(password, salt, 64);
-  const buffer = Buffer.from(expected, 'hex');
-  return buffer.length === derived.length && timingSafeEqual(buffer, derived);
+  const buffer = Buffer.from(expected || '', 'hex');
+  return (
+    !!stored &&
+    buffer.length === derived.length &&
+    timingSafeEqual(buffer, derived)
+  );
 }
+
+export const hashToken = (token) =>
+  createHash('sha256').update(token).digest('hex');
 export async function issueSession(db, userId) {
   const token = randomBytes(32).toString('base64url');
   await db.query(
@@ -29,6 +34,17 @@ export async function issueSession(db, userId) {
   return token;
 }
 export function publicUser(user) {
-  const { password_hash, ...profile } = user;
-  return profile;
+  return Object.fromEntries(
+    [
+      'id',
+      'email',
+      'username',
+      'name',
+      'goal',
+      'experience',
+      'timezone',
+      'rest_seconds',
+      'created_at',
+    ].map((key) => [key, user[key]]),
+  );
 }

@@ -6,19 +6,30 @@ import rateLimit from 'express-rate-limit';
 import { z, ZodError } from 'zod';
 import { config } from './config/env.js';
 import {
-  hashPassword,
-  verifyPassword,
   hashToken,
   issueSession,
   publicUser,
+  hashPassword,
+  verifyPassword,
 } from './services/auth.js';
+import {
+  createRecoveryMailer,
+  createRecoveryCodes,
+} from './services/passwordRecovery.js';
+import {
+  verifyGoogleAccessToken,
+  resolveGoogleAccount,
+} from './services/googleAuth.js';
 import { calculateProgress } from './services/progress.js';
 import { sessionAchievements } from './services/achievements.js';
 import { streakRankings, exerciseRankings } from './services/rankings.js';
 import { localDate, weekday } from './utils/dates.js';
 import {
-  registerSchema,
+  googleLoginSchema,
   loginSchema,
+  registerSchema,
+  resetRequestSchema,
+  resetPasswordSchema,
   profileSchema,
   workoutSchema,
   scheduleSchema,
@@ -49,8 +60,20 @@ async function transaction(db, fn) {
   }
 }
 
-export function createApp(db, { limitRequests = true } = {}) {
+export function createApp(
+  db,
+  {
+    limitRequests = true,
+    verifyGoogle = verifyGoogleAccessToken,
+    recoveryMailer = createRecoveryMailer(),
+    recoveryCodes = createRecoveryCodes(),
+    trustProxyHops = config.trustProxyHops,
+  } = {},
+) {
   const app = express();
+  if (!Number.isInteger(trustProxyHops) || trustProxyHops < 0)
+    throw new Error('TRUST_PROXY_HOPS must be a non-negative integer.');
+  app.set('trust proxy', trustProxyHops);
   app.disable('x-powered-by');
   app.use(helmet());
   app.use(cors({ origin: config.origins, credentials: false }));
@@ -67,8 +90,12 @@ export function createApp(db, { limitRequests = true } = {}) {
       }),
     );
   app.get('/health', async (req, res) => {
-    await db.query('SELECT 1');
-    res.json({ status: 'ok' });
+    try {
+      await db.query('SELECT 1');
+      res.json({ status: 'ok' });
+    } catch {
+      res.status(503).json({ status: 'unavailable' });
+    }
   });
   app.get('/', (req, res) =>
     res.json({ name: 'LetsGym API', health: '/health' }),
@@ -83,39 +110,156 @@ export function createApp(db, { limitRequests = true } = {}) {
   });
   app.use('/api/auth', authLimiter);
 
+  app.post('/api/auth/google', async (req, res) => {
+    const data = googleLoginSchema.parse(req.body);
+    const identity = await verifyGoogle(data.access_token);
+    const result = await transaction(db, async (client) => {
+      const { user, isNewUser } = await resolveGoogleAccount(
+        client,
+        identity,
+        data.timezone,
+      );
+      return {
+        user: publicUser(user),
+        token: await issueSession(client, user.id),
+        isNewUser,
+      };
+    });
+    res.status(result.isNewUser ? 201 : 200).json(result);
+  });
   app.post('/api/auth/register', async (req, res) => {
     const data = registerSchema.parse(req.body);
     const passwordHash = await hashPassword(data.password);
     const result = await transaction(db, async (client) => {
       const { rows } = await client.query(
-        'INSERT INTO letsgym.users (email, password_hash, name, timezone) VALUES ($1,$2,$3,$4) RETURNING *',
-        [data.email, passwordHash, data.name, data.timezone],
+        `INSERT INTO letsgym.users (email,username,name,password_hash,timezone)
+         VALUES ($1,$2,$3,$4,$5) RETURNING *`,
+        [data.email, data.username, data.name, passwordHash, data.timezone],
       );
       return {
         user: publicUser(rows[0]),
         token: await issueSession(client, rows[0].id),
+        isNewUser: true,
       };
     });
     res.status(201).json(result);
   });
   app.post('/api/auth/login', async (req, res) => {
-    const data = loginSchema.parse(req.body);
-    const { rows } = await db.query(
-      'SELECT * FROM letsgym.users WHERE email = $1',
-      [data.email],
-    );
-    // Equal-cost verification for unknown accounts reduces email enumeration through timing.
-    const fallback = '00000000000000000000000000000000:' + '00'.repeat(64);
-    const valid = await verifyPassword(
-      data.password,
-      rows[0]?.password_hash || fallback,
-    );
-    if (!rows[0] || !valid)
-      throw new HttpError(401, 'Email or password is incorrect.');
-    res.json({
-      user: publicUser(rows[0]),
-      token: await issueSession(db, rows[0].id),
+    // Accept the old email field as well as the new username/email identifier.
+    const data = loginSchema.parse({
+      ...req.body,
+      identifier: req.body.identifier ?? req.body.email,
     });
+    const result = await transaction(db, async (client) => {
+      const { rows } = await client.query(
+        'SELECT * FROM letsgym.users WHERE lower(email)=$1 OR lower(username)=$1 FOR UPDATE',
+        [data.identifier],
+      );
+      const user = rows[0];
+      if (!(await verifyPassword(data.password, user?.password_hash)))
+        return null;
+      return {
+        user: publicUser(user),
+        token: await issueSession(client, user.id),
+        isNewUser: false,
+      };
+    });
+    if (!result)
+      throw new HttpError(401, 'Incorrect username/email or password.');
+    res.json(result);
+  });
+  app.post('/api/auth/forgot-password', async (req, res) => {
+    const { email } = resetRequestSchema.parse(req.body);
+    recoveryMailer.assertConfigured();
+    recoveryCodes.assertConfigured();
+    await transaction(db, async (client) => {
+      await client.query('SELECT pg_advisory_xact_lock(hashtext($1))', [
+        `reset:${email}`,
+      ]);
+      const previous = (
+        await client.query(
+          'SELECT sent_at FROM letsgym.password_reset_codes WHERE email=$1',
+          [email],
+        )
+      ).rows[0];
+      if (previous && Date.now() - new Date(previous.sent_at).getTime() < 60000)
+        return;
+      // Store cooldowns for unknown addresses too, and never reveal account existence.
+      const code = recoveryCodes.generate();
+      await client.query(
+        `INSERT INTO letsgym.password_reset_codes (email,code_hash,attempts,expires_at,sent_at)
+        VALUES ($1,$2,0,$3,now()) ON CONFLICT (email) DO UPDATE
+        SET code_hash=EXCLUDED.code_hash,attempts=0,expires_at=EXCLUDED.expires_at,sent_at=now()`,
+        [email, recoveryCodes.hash(email, code), new Date(Date.now() + 600000)],
+      );
+      if (
+        (
+          await client.query(
+            'SELECT id FROM letsgym.users WHERE lower(email)=$1',
+            [email],
+          )
+        ).rows[0]
+      )
+        await recoveryMailer.send({ email, code });
+    });
+    res.json({
+      message:
+        'If an account exists for that email, a code has been sent. Check your inbox and spam folder. You can request another code after 60 seconds.',
+    });
+  });
+  app.post('/api/auth/reset-password', async (req, res) => {
+    const data = resetPasswordSchema.parse(req.body);
+    recoveryCodes.assertConfigured();
+    const passwordHash = await hashPassword(data.password);
+    const success = await transaction(db, async (client) => {
+      await client.query('SELECT pg_advisory_xact_lock(hashtext($1))', [
+        `reset:${data.email}`,
+      ]);
+      const row = (
+        await client.query(
+          'SELECT * FROM letsgym.password_reset_codes WHERE email=$1 FOR UPDATE',
+          [data.email],
+        )
+      ).rows[0];
+      if (
+        !row ||
+        row.attempts >= 5 ||
+        new Date(row.expires_at).getTime() <= Date.now()
+      )
+        return false;
+      if (!recoveryCodes.matches(data.email, data.code, row.code_hash)) {
+        await client.query(
+          'UPDATE letsgym.password_reset_codes SET attempts=attempts+1 WHERE email=$1',
+          [data.email],
+        );
+        return false;
+      }
+      const user = (
+        await client.query(
+          'SELECT id FROM letsgym.users WHERE lower(email)=$1 FOR UPDATE',
+          [data.email],
+        )
+      ).rows[0];
+      if (!user) return false;
+      await client.query(
+        'UPDATE letsgym.users SET password_hash=$1,email_verified_at=now() WHERE id=$2',
+        [passwordHash, user.id],
+      );
+      await client.query('DELETE FROM letsgym.auth_sessions WHERE user_id=$1', [
+        user.id,
+      ]);
+      await client.query(
+        'DELETE FROM letsgym.password_reset_codes WHERE email=$1',
+        [data.email],
+      );
+      return true;
+    });
+    if (!success)
+      throw new HttpError(
+        400,
+        'Invalid or expired code. Request a new code if needed.',
+      );
+    res.json({ message: 'Password changed. Sign in with your new password.' });
   });
 
   app.use('/api', async (req, res, next) => {

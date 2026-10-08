@@ -27,16 +27,23 @@ npm install
 npm start
 ```
 
-For Expo Go on a physical phone, set `EXPO_PUBLIC_API_URL` in `frontend/.env`
+For an installed/development build on a physical phone, set `EXPO_PUBLIC_API_URL` in `frontend/.env`
 to your computer's LAN address, e.g. `http://192.168.1.10:3000`. Both devices
 must be on the same network. Restart Expo after changing environment variables.
 Android emulators default to `http://10.0.2.2:3000`. Browsers and the iOS simulator
 default to `http://localhost:3000`. The iOS simulator requires macOS.
 Use `npm run web` in `frontend/` for a browser preview.
 
+Configure Google sign-in using [architecture/google-sign-in.md](architecture/google-sign-in.md).
+It requires Google OAuth enabled in Supabase plus the public Auth settings in
+both environment files. Password sign-in works in Expo Go on iPhone. Google is
+optional on supported builds and displays an unavailable alert on iOS.
+Email recovery setup is in [architecture/password-sign-in.md](architecture/password-sign-in.md).
+
 ## Features
 
-- Register/login and update profile, goal, experience, timezone, and rest interval.
+- Register and sign in with username/email and password; recover passwords using an emailed code.
+- Optionally continue with Google on supported platforms; update profile, goal, experience, timezone, and rest interval.
 - Choose from four pre-made routines or build, reorder, edit, and delete custom workouts.
 - Assign workouts to weekdays and protect streaks on rest days.
 - Search/filter 154 gym exercises by muscle and equipment, with illustrations and instructions.
@@ -67,13 +74,20 @@ coverage, verification, and practical limits.
 
 The frontend talks to Express. Database credentials stay in `backend/.env`.
 Express authenticates requests and scopes database queries to their owner.
-Passwords use salted scrypt hashes. Random session tokens are stored as hashes
+Supabase Auth verifies Google identities; Express validates them with the Auth
+server and issues app sessions. Express also provides scrypt password login and
+single-use email-code recovery with session revocation. Random session tokens are stored as hashes
 in PostgreSQL and in SecureStore on native devices (sessionStorage on web).
 Tables live in the private `letsgym` schema with default-deny RLS and are not
-exposed through Supabase's public Data API. Supabase provides PostgreSQL;
-account authentication is handled by Express.
+exposed through Supabase's public Data API. Existing Gmail accounts retain their
+workout data when connected to their verified Google account. See the setup guide
+for ownership verification of existing accounts with third-party email addresses.
 
 ## Verification
+
+For hosted backend setup, follow the
+[Render deployment guide](architecture/render-deployment.md). The root
+[render.yaml](render.yaml) defines the backend service using the existing Supabase database.
 
 Run `npm test` in `backend/` for isolated PostgreSQL integration/regression tests.
 Run `npx expo export --platform android --platform ios --platform web` in

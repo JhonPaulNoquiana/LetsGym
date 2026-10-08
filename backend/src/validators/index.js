@@ -1,6 +1,21 @@
 import { z } from 'zod';
 
 export const idSchema = z.string().uuid();
+export const emailSchema = z.string().trim().toLowerCase().email().max(254);
+export const passwordSchema = z
+  .string()
+  .min(8, 'Use at least 8 characters for your password.')
+  .max(128);
+export const loginSchema = z.object({
+  identifier: z.string().trim().toLowerCase().min(1).max(254),
+  password: z.string().min(1).max(128),
+});
+export const resetRequestSchema = z.object({ email: emailSchema });
+export const resetPasswordSchema = z.object({
+  email: emailSchema,
+  code: z.string().regex(/^\d{6}$/, 'Enter the six-digit email code.'),
+  password: passwordSchema,
+});
 export const timezone = z
   .string()
   .max(80)
@@ -20,19 +35,29 @@ export const profileSchema = z.object({
   rest_seconds: z.number().int().min(15).max(600),
 });
 export const registerSchema = z.object({
-  name: z.string().trim().min(2).max(60),
-  email: z
+  email: emailSchema,
+  username: z
     .string()
     .trim()
-    .email()
-    .max(254)
-    .transform((s) => s.toLowerCase()),
-  password: z.string().min(10).max(128),
+    .toLowerCase()
+    .min(3)
+    .max(30)
+    .regex(
+      /^[a-z0-9_]+$/,
+      'Username can contain letters, numbers, and underscores.',
+    ),
+  name: z.string().trim().min(2).max(60),
+  password: passwordSchema,
   timezone: timezone.default('Asia/Manila'),
 });
-export const loginSchema = registerSchema
-  .pick({ email: true })
-  .extend({ password: z.string().min(1).max(128) });
+export const googleLoginSchema = z.object({
+  access_token: z
+    .string()
+    .min(20)
+    .max(16384)
+    .regex(/^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/),
+  timezone: timezone.default('Asia/Manila'),
+});
 export const exerciseSchema = z.object({
   name: z.string().trim().min(2).max(80),
   muscle: z.enum([
