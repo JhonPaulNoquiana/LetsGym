@@ -1,5 +1,8 @@
 # LetsGym
 
+Open [LetsGym](https://letsgym-web.onrender.com) in Safari and choose
+**Share → Add to Home Screen** to use it on your iPhone.
+
 A workout planner and tracker built with React Native + Expo, Node.js + Express,
 and Supabase PostgreSQL. Implements [architecture/features.md](architecture/features.md)
 using the dark charcoal, lime, cyan, and typography references in

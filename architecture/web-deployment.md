@@ -1,5 +1,8 @@
 # LetsGym on your iPhone Home Screen
 
+Live app: **https://letsgym-web.onrender.com**. The API allows this exact origin.
+Open this link in Safari and follow the Home Screen instructions in section 4.
+
 The Expo frontend exports a static web app with standalone display metadata,
 LetsGym icons, iPhone safe-area support, and touch navigation. It connects to the
 existing Express API and Supabase database. No Apple developer membership is needed.
@@ -61,7 +64,9 @@ Render static sites have a free hosting option. Do not select a paid upgrade.
 For manual setup, also add the headers from `render.yaml` under **Headers**:
 `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, and
 `Referrer-Policy: strict-origin-when-cross-origin` for `/*`; set
-`Cache-Control: no-cache` for `/index.html` and `/manifest.webmanifest`.
+`Cache-Control: no-cache` for `/index.html` and `/manifest.webmanifest`. Add
+`Content-Type: application/manifest+json` for `/manifest.webmanifest` so the host
+serves the installation metadata with its correct MIME type.
 
 ## 3. Allow the web app to call your API
 
